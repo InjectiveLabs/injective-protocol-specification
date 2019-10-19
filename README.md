@@ -5,8 +5,8 @@ Specification for Injective Protocol
 
 1.  [Architecture](#architecture)
 1.  [Sidechain](#sidechain)
-      i.  [Decentralized Orderbook](#decentralized orderbook)
-      ii.  [Relayer](#relayer)
+      1.  [Decentralized Orderbook](#decentralized orderbook)
+      1.  [Relayer](#relayer)
 1.  [Filter Contract](#filter)
 
 
