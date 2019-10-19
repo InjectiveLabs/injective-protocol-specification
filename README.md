@@ -1,6 +1,4 @@
-# injective-protocol-specification
-Specification for Injective Protocol
-
+# Injective Protocol 0.1.0 Specification
 ## Table of contents
 
 1.  [Architecture](#architecture)
