@@ -6,8 +6,13 @@ Specification for Injective Protocol
 1.  [Architecture](#architecture)
 1.  [Sidechain](#sidechain)
       1.  [Decentralized Orderbook](#decentralizedorderbook)
-      1.  [Relayer](#relayer)
+      1.  [Trade Execution Coordinator](#tradeexecutioncoordinator)
 1.  [Filter Contract](#filter)
+1.  [Interface](#interface)
+1.  [Governance](#governance)
+1.  [Token Economics](#tokeneconomics)
+1.  [Miscellaneous](#miscellaneous)
+      1.  [Verifiable Delay Function](#verifiabledelayfunction)
 
 
 
