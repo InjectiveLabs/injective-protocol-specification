@@ -52,22 +52,7 @@ for it.
 In our protocol,``t`` is the time parameter for proof of elapsed time. In the context of Sloth, ``t`` 
 is the number of modular square root evaluation. ``t`` can be computed incrementally for it to become a time proof.
 
-##Implementation
 
-This section is up for debate depending on the properties of Tendermint
-
-After submitting the take order information adhering to 0x schema, the user will generate `x` value by hashing the signature provided in the order information. 
-Using `x`, user begins to calculate VDF (Sloth for example): ``sqrt(x)-> y , sqrt(y)-> y_1 , sqrt(y_1)->y_2 ...`` until it reaches a 
-satisfactory checkpoint `y_t`. User then submits `y_t, t , x , order_hash` to a relayer so that it can map them to the 
-order information the user submitted previously. The relayer will then perform `vdf_verify` in `check_tx`
-to ensure the validity of the user's VDF proof. In sloth's case, the relayer can simply calculate `((y_t)^2)^(t+1)==x`. 
-
-After `check_tx`, the relayer will append `t` to the user's existing order information. Since traders are allowed to
-submit multiple transactions for time proofs (ex: `tx_1: {y_t , t ,x} tx_2: {y_2t , 2t , x} tx_3: {y_3t , 3t , x}`), the relayer should also check if the `t` is bigger than the existing `t` attached to the trader's information before
-performing any VDF verification.
-
-Before a block is mined, the relayers match take orders with make orders on a `t`-priority basis. Meaning that for each make order, the taker orders
-are sorted by descending `t` and filled in that order.
 
 ###Interaction
 
