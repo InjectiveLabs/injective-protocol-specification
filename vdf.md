@@ -4,7 +4,7 @@ We provide VDF (Verifiable Delay Function) Implementations in Golang for two can
 vdf/candidates
 ``.
 
-##Intro to VDF
+## Intro to VDF
 VDF is a tuple of three algorithms:
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=Setup(\lambda,&space;T)\rightarrow&space;pp" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Setup(\lambda,&space;T)\rightarrow&space;pp" title="Setup(\lambda, T)\rightarrow pp" /></a>
