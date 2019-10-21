@@ -53,7 +53,7 @@ In our protocol,``t`` is the time parameter for proof of elapsed time. In the co
 is the number of modular square root evaluation. ``t`` can be computed incrementally for it to become a time proof.
 
 
-### Interaction
+## Interaction
 
 Our client will be interacting with the VDF candidates under through `vdf_interface.go`. The exported functions are:
 ```
