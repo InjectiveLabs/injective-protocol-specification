@@ -2,6 +2,7 @@
 
 ## Table of contents
 
+1.  [Overview](#overview)
 1.  [Architecture](#architecture)
 1.  [Sidechain](#sidechain)
     1.  [Decentralized Orderbook](#decentralized-orderbook)
@@ -15,15 +16,11 @@
     1.  [Verifiable Delay Function](#verifiable-delay-function)
 
 
-
-# Architecture
-
+# Overview
 Injective Protocol is a fully decentralized exchange protocol built on top of Ethereum and Cosmos. 
 
+# Architecture
 The protocol is comprised of three principal components: 1) the Injective sidechain relayer network, 2) Injective's filter contract (smart contract on Ethereum), and (optionally) 3) a front end interface. In this setup, the front end interface is used to communicate orders to and from the sidechain relayer network which serves as a decentralized orderbook and trade execution coordinator (TEC). The sidechain relayer network aggregates trades in a canonical ordering (preventing front-running) and then submits the trades on Injective's [filter contract](https://github.com/0xProject/0x-protocol-specification/blob/master/v2/v2-specification.md#filter-contracts) which in turn executes and settles the trades on 0x. 
-
-
-
 <img alt="diagram-injective.png" src="https://cl.ly/f9077bd91d24/download/diagram-injective.png" width="700px"/>
 
 # Sidechain
@@ -32,9 +29,16 @@ Injective Protocol uses an application-specific sidechain relayer network to mai
 
 ## Decentralized Orderbook
 
-The Injective sidechain hosts a decentralized, censorship-resistant orderbook which stores and relays orders. 
+The Injective sidechain hosts a decentralized, censorship-resistant orderbook which stores and relays orders. The application logic for the orderbook is in the [`orders`](https://github.com/InjectiveLabs/injective-core/tree/master/cosmos/x/orders) module which supports six distinct actions (state transitions in the form of [Msg](https://godoc.org/github.com/cosmos/cosmos-sdk/types#Msgs)):
 
-### Make Order Relay Procedure
+* Creating a make order
+* Creating a take order
+* Soft cancelling a make order
+* Creating a trading pair
+* Suspending a trading pair
+* Resuming a trading pair
+
+### Make Order Procedure
 1. A valid signed 0x order is first created
 2. The order is submitted to the sidechain through a HTTP POST call to a relayer's endpoint which then forwards the order to the network
 3. The relayer performs validation on the order and checks
