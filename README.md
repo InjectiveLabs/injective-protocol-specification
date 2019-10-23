@@ -118,6 +118,8 @@ Each full-node of the
 ### Validator Requirements
 ** TODO** To become a validator of the Injective sidechain, ... 
 
+https://docs.google.com/document/d/1PUnhciynPqXhyQqtywL5PeTz9mSDGWklp4-U7OajX-s/edit?pli=1#heading=h.ohv3ez9ge57k
+
 #### Registration and Stake
 ** TODO**
 
@@ -131,12 +133,14 @@ Each full-node of the
 ** TODO**
 
 ## Coordinator Contract
-Injective 
+Trades are submitted by the sidechain relay network to Injective's trade execution coordinator smart contract which then executes and settles the trades on 0x. Unlike the traditional 0x 
+
+
+### Negative Spread 
 
 
 
 ## Interface
-** TODO**
 Relayers can earn greater rewards by serving hosting an interface that is configured with their relayer API. Injective has provided two open-source front-end interface implementations allowing for users to interact with the protocol through a friendly graphical user interface. 
 
 Our first implementation is a fork of the [0x-launch-kit-frontend](https://github.com/0xProject/0x-launch-kit-frontend) adapted to our protocol: 
@@ -149,10 +153,10 @@ Our second implementation is a more powerful and comprehensive interface catered
 ** TODO**
 
 ## Token Economics
-** TODO**
+** TODO** 
 
 ## Miscellaneous
-** TODO**
+** TODO** 
 
 ### Front-Running Prevention
-Verifiable Delay Function
+Verifiable Delay Function 
