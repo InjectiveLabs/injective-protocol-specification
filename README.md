@@ -4,15 +4,15 @@
 
 1.  [Architecture](#architecture)
 1.  [Sidechain](#sidechain)
-    1.  [Decentralized Orderbook](#decentralizedorderbook)
-    1.  [Relayer API](#relayerapi)
-    1.  [Trade Execution Coordinator](#tradeexecutioncoordinator)
+    1.  [Decentralized Orderbook](#decentralized-orderbook)
+    1.  [Relayer API](#relayer-api)
+    1.  [Trade Execution Coordinator](#trade-execution-coordinator)
 1.  [Filter Contract](#filter)
 1.  [Interface](#interface)
 1.  [Governance](#governance)
-1.  [Token Economics](#tokeneconomics)
+1.  [Token Economics](#token-economics)
 1.  [Miscellaneous](#miscellaneous)
-    1.  [Verifiable Delay Function](#verifiabledelayfunction)
+    1.  [Verifiable Delay Function](#verifiable-delay-function)
 
 
 
@@ -30,12 +30,11 @@ The protocol is comprised of three principal components: 1) the Injective sidech
 
 Injective Protocol uses an application-specific sidechain relayer network to maintain a decentralized orderbook, front-running resistant trade execution coordinator, and order matching and execution engine. We refer to our model as **sidechain order relay with on-chain settlement** - a decentralized implementation of the traditionally centralized [off-chain order relay](https://github.com/0xProject/0x-protocol-specification/blob/master/v2/v2-specification.md#architecture) used by nearly all central limit order book decentralized exchanges. The sidechain is built on top of Tendermint and the application logic is implemented using the Cosmos SDK. 
 
-### Decentralized Orderbook
+## Decentralized Orderbook
 
 The Injective sidechain hosts a decentralized, censorship-resistant orderbook which stores and relays orders. 
 
-#### Make Order Relay Procedure
-
+### Make Order Relay Procedure
 1. A valid signed 0x order is first created
 2. The order is submitted to the sidechain through a HTTP POST call to a relayer's endpoint which then forwards the order to the network
 3. The relayer performs validation on the order and checks
@@ -54,5 +53,5 @@ The Injective sidechain hosts a decentralized, censorship-resistant orderbook wh
 6. Nodes reach consensus on on which transactions to include in each round through [Tendermint BFT](https://tendermint.com/docs/spec/consensus/consensus.html) and commit to a new block, fully executing the state transitions from each transaction.
    1. Each make order message (transaction) is routed to the `handleMsgCreateMakeOrder` handler function which stores it in the keeper provided the order and trade pair are valid
 
-### Relayer API
+## Relayer API
 Each relayer can optionally support their own API allowing for 1) submission of orders to the sidechain and 2) query of data of the application state. The following implementation is provided out-of-the-box for relayers to use, but each relayer is free to provide their own API for their desired use case. 
