@@ -155,7 +155,7 @@ For two orders `OrderA` and `OrderB`, there exists negative spread if and only i
 
 `p^2 * OrderA.makerAssetAmount * OrderB.makerAssetAmount >= OrderA.takerAssetAmount * OrderB.takerAssetAmount`
 
-In our model, due to rounding reasons and limitations in decimal representations in Solidity, we represent `p^2 = 1.004` for `p = 1.002`. 
+In our model, due to rounding reasons and limitations in decimal representations in Solidity, we represent `p^2 = 1.002^2` as `1.004`.
 
 ## Interface
 Relayers can earn greater rewards by serving hosting an interface that is configured with their relayer API. Injective has provided two open-source front-end interface implementations allowing for users to interact with the protocol through a friendly graphical user interface. 
