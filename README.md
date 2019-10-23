@@ -21,6 +21,7 @@ Injective Protocol is a fully decentralized exchange protocol built on top of Et
 
 # Architecture
 The protocol is comprised of three principal components: 1) the Injective sidechain relayer network, 2) Injective's filter contract (smart contract on Ethereum), and (optionally) 3) a front end interface. In this setup, the front end interface is used to communicate orders to and from the sidechain relayer network which serves as a decentralized orderbook and trade execution coordinator (TEC). The sidechain relayer network aggregates trades in a canonical ordering (preventing front-running) and then submits the trades on Injective's [filter contract](https://github.com/0xProject/0x-protocol-specification/blob/master/v2/v2-specification.md#filter-contracts) which in turn executes and settles the trades on 0x. 
+
 <img alt="diagram-injective.png" src="https://cl.ly/f9077bd91d24/download/diagram-injective.png" width="700px"/>
 
 # Sidechain
@@ -29,7 +30,7 @@ Injective Protocol uses an application-specific sidechain relayer network to mai
 
 ## Decentralized Orderbook
 
-The Injective sidechain hosts a decentralized, censorship-resistant orderbook which stores and relays orders. The application logic for the orderbook is in the [`orders`](https://github.com/InjectiveLabs/injective-core/tree/master/cosmos/x/orders) module which supports six distinct actions (state transitions in the form of [Msg](https://godoc.org/github.com/cosmos/cosmos-sdk/types#Msgs)):
+The Injective sidechain hosts a decentralized, censorship-resistant orderbook which stores and relays orders. The application logic for the orderbook is in the [`orders`](https://github.com/InjectiveLabs/injective-core/tree/master/cosmos/x/orders) module which supports six distinct actions (i.e. state transitions in the form of [Msgs](https://godoc.org/github.com/cosmos/cosmos-sdk/types#Msg)):
 
 * Creating a make order
 * Creating a take order
@@ -38,24 +39,44 @@ The Injective sidechain hosts a decentralized, censorship-resistant orderbook wh
 * Suspending a trading pair
 * Resuming a trading pair
 
+Further documentation on the orders module can be found [here](https://github.com/InjectiveLabs/injective-core/blob/master/cosmos/x/orders/README.md). 
+
 ### Make Order Procedure
-1. A valid signed 0x order is first created
+1. A valid signed make order is created
 2. The order is submitted to the sidechain through a HTTP POST call to a relayer's endpoint which then forwards the order to the network
-3. The relayer performs validation on the order and checks
-	1. The order format integrity
+3. The relayer performs validation on the order and checks that:
+	1. The order format integrity is kept
 		1. The order should conform to the [0x order message format](https://github.com/0xProject/0x-protocol-specification/blob/master/v2/v2-specification.md#order-message-format) 
 		2. The order should be [`fillable`](https://github.com/0xProject/0x-protocol-specification/blob/master/v2/v2-specification.md#getorderinfo) 
-		3. The `feeRecipientAddress` must match the originating relayer's Ethereum address in the relayer address registry. 
+		3. The `feeRecipientAddress` must match the originating relayer's Ethereum address in the relayer address registry
 		4. The `takerAddress` must match the address of the Injective Filter Contract
 		5. The `senderAddress` must match the address of the Injective Filter Contract
 	2. The maker's  `makerAssetData` balance should be greater than or equal to the `makerAssetAmount`
 	2. The maker's  `makerAssetData`  approval amount should be greater than or equal to the `makerAssetAmount` of the order
 	3. The signature validity for the hash of the order
 	4. The trading pair is supported by the sidechain
-4. If the order is valid, the relayer broadcasts a [Tendermint/Cosmos SDK Tx](https://github.com/cosmos/cosmos-sdk/blob/master/types/tx_msg.go#L34-L38) containing the make order to its peers in the sidechain network
-5. Each sidechain node calls [CheckTx](https://tendermint.com/docs/app-dev/abci-spec.html#checktx) on the transaction which performs [standard Tendermint checks](https://github.com/cosmos/cosmos-sdk/blob/master/docs/basics/tx-lifecycle.md#addition-to-mempool) on the transaction and adds/discards the transaction to the mempool.
-6. Nodes reach consensus on on which transactions to include in each round through [Tendermint BFT](https://tendermint.com/docs/spec/consensus/consensus.html) and commit to a new block, fully executing the state transitions from each transaction.
-   1. Each make order message (transaction) is routed to the `handleMsgCreateMakeOrder` handler function which stores it in the keeper provided the order and trade pair are valid
+4. The relayer broadcasts a [Tendermint/Cosmos SDK Tx](https://github.com/cosmos/cosmos-sdk/blob/master/types/tx_msg.go#L34-L38) containing the order to its peers in the sidechain network (assuming step 3 passes)
+
+### Take Order Procedure
+1. A valid signed take order is created
+2. The order is submitted to the sidechain through a HTTP POST call to a relayer's endpoint which then forwards the order to the network
+3. The relayer performs the same validation of the order as in the make order prodedure and also checks that:
+	1. The make order fill amounts are fillable 
+	2. The trade conforms to the negative spread model
+	3. `VdfInput` of the order hash is valid (if supplied)
+	4. `VdfOutput` is the valid output for the VDF applied on `VdfInput` for `VdfIterations` (if supplied)
+4. The relayer broadcasts a [Tendermint/Cosmos SDK Tx](https://github.com/cosmos/cosmos-sdk/blob/master/types/tx_msg.go#L34-L38) containing the order to its peers in the sidechain network (assuming step 3 passes)
+
+### Soft Cancel Procedure
+
+
+
+### Tendermint Procedure
+1. Each sidechain node calls [CheckTx](https://tendermint.com/docs/app-dev/abci-spec.html#checktx) on the transaction which performs [standard Tendermint checks](https://github.com/cosmos/cosmos-sdk/blob/master/docs/basics/tx-lifecycle.md#addition-to-mempool) on the transaction and adds/discards the transaction to the mempool.
+2. Nodes reach consensus on on which transactions to include in each round through [Tendermint BFT](https://tendermint.com/docs/spec/consensus/consensus.html) and commit to a new block, fully executing the state transitions from each transaction.
+   1. Each order message (transaction) is routed to its designated handler function which performs further checks and executes changes to the application store. 
+
+
 
 ## Relayer API
 Each relayer can optionally support their own API allowing for 1) submission of orders to the sidechain and 2) query of data of the application state. The following implementation is provided out-of-the-box for relayers to use, but each relayer is free to provide their own API for their desired use case. 
