@@ -8,10 +8,18 @@
     1.  [Decentralized Orderbook](#decentralized-orderbook)  
         1. [Make Order Creation](#make-order-creation)
         1. [Take Order Creation](#take-order-creation)
-        1. [Make Order Procedure](#make-order-procedure)
-        1. [Make Order Procedure](#make-order-procedure)
+        1. [Soft Cancel Creation](#soft-cancel-creation)
+        1. [Trading Pair Creation](#trading-pair-creation)
+        1. [Trading Pair Suspension](#trading-pair-suspension)
+        1. [Trading Pair Resumption](#trading-pair-resumption)
+        1. [Tendermint Procedure](#tendermint-procedure)
     1.  [Relayer API](#relayer-api)
     1.  [Trade Execution Coordinator](#trade-execution-coordinator)
+    1.  [Validator Requirements](#validator-requirements)
+        1. [Registration and Stake](#registration-and-stake)
+        1. [Validator Duties](#validator-duties)
+        1. [Validator Rewards](#validator-rewards)
+        1. [Slashing](#slashing)
 1.  [Filter Contract](#filter)
 1.  [Interface](#interface)
 1.  [Governance](#governance)
@@ -41,14 +49,9 @@ Injective Protocol uses an application-specific sidechain relayer network to mai
 
 ## Decentralized Orderbook
 
-The Injective sidechain hosts a decentralized, censorship-resistant orderbook which stores and relays orders. The application logic for the orderbook is in the [`orders`](https://github.com/InjectiveLabs/injective-core/tree/master/cosmos/x/orders) module which supports six distinct actions (i.e. state transitions in the form of [Msgs](https://godoc.org/github.com/cosmos/cosmos-sdk/types#Msg)):
+The Injective sidechain hosts a decentralized, censorship-resistant orderbook which stores and relays orders. The application logic for the orderbook is in the [`orders`](https://github.com/InjectiveLabs/injective-core/tree/master/cosmos/x/orders) module which supports six distinct actions (i.e. state transitions in the form of [Msgs](https://godoc.org/github.com/cosmos/cosmos-sdk/types#Msg)): [make order creation](#make-order-creation), [take order creation](#take-order-creation), [soft cancel](#soft-cancel), [trading pair creation](#trading-pair-creation), [trading pair suspension](#trading-pair-suspension), and [trading pair resumption](#trading-pair-resumption). 
 
-* Make order creation
-* Take order creation
-* Soft cancel 
-* Trading pair creation
-* Trading pair suspension
-* Trading pair resumption
+**TODO**: add take order fill, make order remove
 
 The procedure involved with each action is described below, with each procedure for the above being followed by the [Tendermint procedure](#tendermint-procedure) (which we briefly include for completeness of understanding). Further documentation on the orders module and Tendermint can be found [here](https://github.com/InjectiveLabs/injective-core/blob/master/cosmos/x/orders/README.md) and [here](https://tendermint.com/docs/introduction/) respectively. 
 
@@ -80,7 +83,7 @@ The procedure involved with each action is described below, with each procedure 
 4. The relayer broadcasts a [Tendermint/Cosmos SDK Tx](https://github.com/cosmos/cosmos-sdk/blob/master/types/tx_msg.go#L34-L38) containing the order to its peers in the sidechain network (assuming step 3 passes)
 5. The take order msg is handled and added to the pending queue of take orders to be submitted for that block
 
-### Soft Cancel 
+### Soft Cancel Creation
 1. A valid signed cancel order is created
 2. The order is submitted to the sidechain through a HTTP POST call to a relayer's endpoint which then forwards the order to the network
 3. The relayer validates the cancel order 
@@ -88,13 +91,15 @@ The procedure involved with each action is described below, with each procedure 
 5. The make order in question is marked as soft-cancelled and take orders in the pending queue which include the soft-cancelled make order are removed. 
 
 ### Trading Pair Creation 
-TBD
+TBD; determine mechanism design for accepting trading pairs through governance mechanism  
+
+- requires filter contract sufficient balance
 
 ### Trading Pair Suspension
-TBD
+TBD; determine suspension mechanism of trading pair through 1) governance procedure or 2) unplanned FC failure
 
 ### Trading Pair Resumption
-TBD
+TBD; determine resumption mechanism of trading pair through 1) governance procedure
 
 ### Tendermint Procedure
 1. Each sidechain node calls [CheckTx](https://tendermint.com/docs/app-dev/abci-spec.html#checktx) on the transaction which performs [standard Tendermint checks](https://github.com/cosmos/cosmos-sdk/blob/master/docs/basics/tx-lifecycle.md#addition-to-mempool) on the transaction and adds/discards the transaction to the mempool.
@@ -104,3 +109,41 @@ TBD
 
 ## Relayer API
 Each relayer can optionally support their own API allowing for 1) submission of orders to the sidechain and 2) query of data of the application state. The following implementation is provided out-of-the-box for relayers to use, but each relayer is free to provide their own API for their desired use case. 
+
+**TODO**: fill details about relayer API
+
+## Trade Execution Coordinator
+Each full-node of the 
+
+## Validator Requirements
+** TODO** To become a validator of the Injective sidechain, ... 
+
+### Registration and Stake
+** TODO**
+
+### Validator Duties
+** TODO**
+
+### Validator Rewards
+** TODO**
+
+### Slashing
+** TODO**
+
+# Filter Contract
+** TODO**
+
+# Interface
+** TODO**
+
+# Governance
+** TODO**
+
+# Token Economics
+** TODO**
+
+# Miscellaneous
+** TODO**
+## Front-Running Prevention
+Verifiable Delay Function
+** TODO**
