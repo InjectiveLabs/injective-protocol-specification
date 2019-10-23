@@ -110,10 +110,14 @@ TBD; determine resumption mechanism of trading pair through 1) governance proced
 ### Relayer API
 Each relayer can optionally support their own API allowing for 1) submission of orders to the sidechain and 2) query of data of the application state. The following implementation is provided out-of-the-box for relayers to use, but each relayer is free to provide their own API for their desired use case. 
 
+https://app.swaggerhub.com/apis/InjectiveLabs/injective-tendermint_external_and_internal_api/1.0.0
+
 **TODO**: fill details about relayer API
 
 ### Trade Execution Coordination
-Each full-node of the 
+** TODO**
+#### Eth-Tx Module
+Each full-node of the sidechain 
 
 ### Validator Requirements
 ** TODO** To become a validator of the Injective sidechain, ... 
