@@ -5,7 +5,11 @@
 1.  [Overview](#overview)
 1.  [Architecture](#architecture)
 1.  [Sidechain](#sidechain)
-    1.  [Decentralized Orderbook](#decentralized-orderbook)
+    1.  [Decentralized Orderbook](#decentralized-orderbook)  
+        1. [Make Order Creation](#make-order-creation)
+        1. [Take Order Creation](#take-order-creation)
+        1. [Make Order Procedure](#make-order-procedure)
+        1. [Make Order Procedure](#make-order-procedure)
     1.  [Relayer API](#relayer-api)
     1.  [Trade Execution Coordinator](#trade-execution-coordinator)
 1.  [Filter Contract](#filter)
@@ -39,16 +43,16 @@ Injective Protocol uses an application-specific sidechain relayer network to mai
 
 The Injective sidechain hosts a decentralized, censorship-resistant orderbook which stores and relays orders. The application logic for the orderbook is in the [`orders`](https://github.com/InjectiveLabs/injective-core/tree/master/cosmos/x/orders) module which supports six distinct actions (i.e. state transitions in the form of [Msgs](https://godoc.org/github.com/cosmos/cosmos-sdk/types#Msg)):
 
-* Creating a make order
-* Creating a take order
-* Soft cancelling a make order
-* Creating a trading pair
-* Suspending a trading pair
-* Resuming a trading pair
+* Make order creation
+* Take order creation
+* Soft cancel 
+* Trading pair creation
+* Trading pair suspension
+* Trading pair resumption
 
 The procedure involved with each action is described below, with each procedure for the above being followed by the [Tendermint procedure](#tendermint-procedure) (which we briefly include for completeness of understanding). Further documentation on the orders module and Tendermint can be found [here](https://github.com/InjectiveLabs/injective-core/blob/master/cosmos/x/orders/README.md) and [here](https://tendermint.com/docs/introduction/) respectively. 
 
-### Make Order Procedure
+### Make Order Creation
 1. A valid signed make order is created
 2. The order is submitted to the sidechain through a HTTP POST call to a relayer's endpoint which then forwards the order to the network
 3. The relayer performs validation on the order and checks that:
@@ -63,8 +67,9 @@ The procedure involved with each action is described below, with each procedure 
 	3. The signature validity for the hash of the order
 	4. The trading pair is supported by the sidechain
 4. The relayer broadcasts a [Tendermint/Cosmos SDK Tx](https://github.com/cosmos/cosmos-sdk/blob/master/types/tx_msg.go#L34-L38) containing the order to its peers in the sidechain network (assuming step 3 passes)
+5. The make order msg is handled and added to the orderbook
 
-### Take Order Procedure
+### Take Order Creation
 1. A valid signed take order is created
 2. The order is submitted to the sidechain through a HTTP POST call to a relayer's endpoint which then forwards the order to the network
 3. The relayer performs the same validation of the order as in the make order prodedure and also checks that:
@@ -73,18 +78,22 @@ The procedure involved with each action is described below, with each procedure 
 	3. `VdfInput` of the order hash is valid (if supplied)
 	4. `VdfOutput` is the valid output for the VDF applied on `VdfInput` for `VdfIterations` (if supplied)
 4. The relayer broadcasts a [Tendermint/Cosmos SDK Tx](https://github.com/cosmos/cosmos-sdk/blob/master/types/tx_msg.go#L34-L38) containing the order to its peers in the sidechain network (assuming step 3 passes)
+5. The take order msg is handled and added to the pending queue of take orders to be submitted for that block
 
-### Soft Cancel Procedure
+### Soft Cancel 
+1. A valid signed cancel order is created
+2. The order is submitted to the sidechain through a HTTP POST call to a relayer's endpoint which then forwards the order to the network
+3. The relayer validates the cancel order 
+4. The relayer broadcasts a [Tendermint/Cosmos SDK Tx](https://github.com/cosmos/cosmos-sdk/blob/master/types/tx_msg.go#L34-L38) containing the order to its peers in the sidechain network (assuming step 3 passes)
+5. The make order in question is marked as soft-cancelled and take orders in the pending queue which include the soft-cancelled make order are removed. 
 
-
-
-### Trading Pair Creation Procedure
+### Trading Pair Creation 
 TBD
 
-### Trading Pair Suspension Procedure
+### Trading Pair Suspension
 TBD
 
-### Trading Pair Resumption Procedure
+### Trading Pair Resumption
 TBD
 
 ### Tendermint Procedure
