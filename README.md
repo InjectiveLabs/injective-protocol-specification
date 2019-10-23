@@ -19,10 +19,17 @@
 # Overview
 Injective Protocol is a fully decentralized exchange protocol built on top of Ethereum and Cosmos. 
 
+* describe problem
+* fully-decentralized, open, permissionless
+* front-running proof
+* native token
+* 0x trades, extensible to arbitrary DeFi
+* gasless transactions
+
 # Architecture
 The protocol is comprised of three principal components: 1) the Injective sidechain relayer network, 2) Injective's filter contract (smart contract on Ethereum), and (optionally) 3) a front end interface. In this setup, the front end interface is used to communicate orders to and from the sidechain relayer network which serves as a decentralized orderbook and trade execution coordinator (TEC). The sidechain relayer network aggregates trades in a canonical ordering (preventing front-running) and then submits the trades on Injective's [filter contract](https://github.com/0xProject/0x-protocol-specification/blob/master/v2/v2-specification.md#filter-contracts) which in turn executes and settles the trades on 0x. 
 
-<img alt="diagram-injective.png" src="https://cl.ly/f9077bd91d24/download/diagram-injective.png" width="700px"/>
+<img alt="diagram-injective.png" src="https://github.com/InjectiveLabs/injective-protocol-specification/blob/master/assets/architecture.png" width="700px"/>
 
 # Sidechain
 
@@ -39,7 +46,7 @@ The Injective sidechain hosts a decentralized, censorship-resistant orderbook wh
 * Suspending a trading pair
 * Resuming a trading pair
 
-Further documentation on the orders module can be found [here](https://github.com/InjectiveLabs/injective-core/blob/master/cosmos/x/orders/README.md). 
+The procedure involved with each action is described below, with each procedure for the above being followed by the [Tendermint procedure](#tendermint-procedure) (which we briefly include for completeness of understanding). Further documentation on the orders module and Tendermint can be found [here](https://github.com/InjectiveLabs/injective-core/blob/master/cosmos/x/orders/README.md) and [here](https://tendermint.com/docs/introduction/) respectively. 
 
 ### Make Order Procedure
 1. A valid signed make order is created
@@ -71,11 +78,19 @@ Further documentation on the orders module can be found [here](https://github.co
 
 
 
+### Trading Pair Creation Procedure
+TBD
+
+### Trading Pair Suspension Procedure
+TBD
+
+### Trading Pair Resumption Procedure
+TBD
+
 ### Tendermint Procedure
 1. Each sidechain node calls [CheckTx](https://tendermint.com/docs/app-dev/abci-spec.html#checktx) on the transaction which performs [standard Tendermint checks](https://github.com/cosmos/cosmos-sdk/blob/master/docs/basics/tx-lifecycle.md#addition-to-mempool) on the transaction and adds/discards the transaction to the mempool.
 2. Nodes reach consensus on on which transactions to include in each round through [Tendermint BFT](https://tendermint.com/docs/spec/consensus/consensus.html) and commit to a new block, fully executing the state transitions from each transaction.
    1. Each order message (transaction) is routed to its designated handler function which performs further checks and executes changes to the application store. 
-
 
 
 ## Relayer API
