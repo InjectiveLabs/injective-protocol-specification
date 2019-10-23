@@ -14,7 +14,7 @@
         1. [Trading Pair Resumption](#trading-pair-resumption)
         1. [Tendermint Procedure](#tendermint-procedure)
     1.  [Relayer API](#relayer-api)
-    1.  [Trade Execution Coordinator](#trade-execution-coordinator)
+    1.  [Trade Execution Coordination](#trade-execution-coordination)
     1.  [Validator Requirements](#validator-requirements)
         1. [Registration and Stake](#registration-and-stake)
         1. [Validator Duties](#validator-duties)
@@ -112,7 +112,7 @@ Each relayer can optionally support their own API allowing for 1) submission of 
 
 **TODO**: fill details about relayer API
 
-### Trade Execution Coordinator
+### Trade Execution Coordination
 Each full-node of the 
 
 ### Validator Requirements
@@ -149,8 +149,13 @@ The flow for filling an order with our coordinator model is as follows:
 <img alt="trade-flow.png" src="https://github.com/InjectiveLabs/injective-protocol-specification/blob/master/assets/trade-flow.svg" width="700px"/>
 
 ### Negative Spread 
+A take order along with its corresponding make order(s) (i.e. a "trade") must result in bilateral negative spread with spread parameter `p = 1.002` in order to be accepted by the sidechain and coordinator contract. 
 
+For two orders `OrderA` and `OrderB`, there exists negative spread if and only if the cost per unit bought (`OrderA.MakerAmount/OrderA.TakerAmount`) is greater than the profit per unit sold of the matched order (`OrderB.TakerAmount / (OrderB.MakerAmount * p^2)`), i.e. the following inequality must hold:
 
+`p^2 * OrderA.makerAssetAmount * OrderB.makerAssetAmount >= OrderA.takerAssetAmount * OrderB.takerAssetAmount`
+
+In our model, due to rounding reasons and limitations in decimal representations in Solidity, we represent `p^2 = 1.004` for `p = 1.002`. 
 
 ## Interface
 Relayers can earn greater rewards by serving hosting an interface that is configured with their relayer API. Injective has provided two open-source front-end interface implementations allowing for users to interact with the protocol through a friendly graphical user interface. 
