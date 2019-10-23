@@ -167,7 +167,13 @@ Our second implementation is a more powerful and comprehensive interface catered
 * **[Injective client implementation](https://github.com/InjectiveLabs/injective-client)**
 
 ## Governance
-** TODO**
+Governance occurs on two separate portions of our protocol: the sidechain application and the coordinator smart contract. 
+
+### Sidechain Governance
+** TODO** 
+
+### Coordinator Contract Governance
+** TODO** 
 
 ## Token Economics
 ** TODO** 
