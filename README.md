@@ -182,11 +182,11 @@ The sidechain governance is built on top of the core Tendermint consensus. Valid
 
 ### Coordinator Contract Governance
 
-***structurally, would we enforce and require the same validators to be the pegzone/fisherman for the FC?***
-***should validators the only ones calling for vote? or anyone can call for votes***
+<!-- ***structurally, would we enforce and require the same validators to be the pegzone/fisherman for the FC?*** -->
+<!-- ***should validators the only ones calling for vote? or anyone can call for votes*** -->
 The coordinator contract only approves blocks of trade that has accumulated enough signature from a supermajority of validators from the sidechain. The coordinator contract maintains a list of validators that can be updated from the sidechain if there are supermajority agreement from the previous list of validators. 
 
-Once the trades are approved, the coordinator contract can submit ***not sure if this is accurate*** the trades to 0x for settlement.
+Once the trades are approved, the coordinator contract can submit <!-- ***not sure if this is accurate***  -->the trades to 0x for settlement.
 #### Voting mechanism
 Injective's native token holder can participate in governing the coordinator contract on Ethereum. They have the power to vote on key decisions such as protocol upgrade, listing, fee schedule, and modifying other key variables in the exchange. Our protocol allows token holders to create proposals that can be voted on by the community with their tokens. 
 #### Creating a Proposal
