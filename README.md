@@ -1,4 +1,4 @@
-# Injective Protocol 0.1.0 Specification
+# Injective Protocol 0.1.0 Specification (WORK IN PROGRESS)
 
 ## Table of contents
 
