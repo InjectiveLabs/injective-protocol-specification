@@ -12,8 +12,3 @@
 
 * [Injective Core](developers/README.md)
 
-## Users
-
-* [Getting Started](users/getting-started.md)
-* [Frequently Asked Questions](users/frequently-asked-questions.md)
-
