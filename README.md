@@ -241,7 +241,6 @@ Reference [Coordinator Contract Governance](#coordinator-contract-governance)
 
 More information regarding the token economics can be found [here](INSERT LINK TO TOKENECONOMICSPAPER HERE)
 ## Miscellaneous
-** TODO** 
 
 ### Front-Running Prevention
 
