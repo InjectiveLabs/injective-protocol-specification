@@ -175,10 +175,7 @@ The flow for filling an order with our coordinator model is as follows:
 2. At a given block, the chosen coordinator for that block submits the pending queue of trades to the trade execution coordinator smart contract. 
 3. The coordinator contract verifies negative spread on each trade and executes the trades on 0x. 
 4. The coordinator contract returns [`FillResults[]`](https://github.com/0xProject/0x-protocol-specification/blob/master/v2/v2-specification.md#fillresults). 
-
-
-
-<img alt="trade-flow.svg" src="https://raw.githubusercontent.com/InjectiveLabs/injective-protocol-specification/master/.gitbook/assets/trade-flow.svg" width="700px"/>
+<img alt="trade-flow.png" src="https://github.com/InjectiveLabs/injective-protocol-specification/blob/master/.gitbook/assets/trade-flow.png?raw=true" width="700px"/>
 
 ### Negative Spread 
 A take order along with its corresponding make order(s) (i.e. a "trade") must result in bilateral negative spread with spread parameter `p = 1.002` in order to be accepted by the sidechain and coordinator contract. 
