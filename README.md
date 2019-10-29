@@ -41,7 +41,7 @@ Injective Protocol is a fully decentralized exchange protocol built on top of Et
 ## Architecture
 The protocol is comprised of three principal components: 1) the Injective sidechain relayer network, 2) Injective's filter contract (smart contract on Ethereum), and (optionally) 3) a front end interface. In this setup, the front end interface is used to communicate orders to and from the sidechain relayer network which serves as a decentralized orderbook and trade execution coordinator (TEC). The sidechain relayer network aggregates trades in a canonical ordering (preventing front-running) and then submits the trades on Injective's trade execution [coordinator contract](https://github.com/0xProject/0x-protocol-specification/blob/master/v2/v2-specification.md#filter-contracts) which in turn executes and settles the trades on 0x. 
 
-<img alt="diagram-injective.png" src="https://github.com/InjectiveLabs/injective-protocol-specification/blob/master/assets/architecture.png" width="700px"/>
+<img alt="diagram-injective.png" src="https://github.com/InjectiveLabs/injective-protocol-specification/blob/master/.gitbook/assets/architecture.png" width="700px"/>
 
 ## Sidechain
 
@@ -176,7 +176,7 @@ The flow for filling an order with our coordinator model is as follows:
 3. The coordinator contract verifies negative spread on each trade and executes the trades on 0x. 
 4. The coordinator contract returns [`FillResults[]`](https://github.com/0xProject/0x-protocol-specification/blob/master/v2/v2-specification.md#fillresults). 
 
-<img alt="trade-flow.png" src="https://github.com/InjectiveLabs/injective-protocol-specification/blob/master/assets/trade-flow.svg" width="700px"/>
+<img alt="trade-flow.png" src="https://github.com/InjectiveLabs/injective-protocol-specification/blob/master/.gitbook/assets/trade-flow.svg" width="700px"/>
 
 ### Negative Spread 
 A take order along with its corresponding make order(s) (i.e. a "trade") must result in bilateral negative spread with spread parameter `p = 1.002` in order to be accepted by the sidechain and coordinator contract. 
