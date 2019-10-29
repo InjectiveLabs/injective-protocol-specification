@@ -1,4 +1,4 @@
-# Injective Protocol 0.1.0 Specification (WORK IN PROGRESS)
+# Injective Protocol 1.0.0 Specification (WORK IN PROGRESS)
 
 ## Table of contents
 
@@ -125,7 +125,7 @@ Please note, that:
 * `/api/rest` is a group of useful methods for Relayer management and custom scenarios, simply REST API.
 
 ### Trade Execution Coordination
-** TODO**
+**TODO**
 
 #### Relayer Accounts and Eth-Tx Modules
 
@@ -223,7 +223,10 @@ Once a proposal becomes a referendum, a `Referendum_period` will begin. During t
 If a proposal is successfully voted into implementation, then the smart contract will enforce the decision deterministically.
 
 ## Token Economics
+The full specifications for Injective Protocol's token economics can be found [here](https://github.com/InjectiveLabs/injective-protocol-specification/blob/master/token-economics.md). 
+
 Injective Protocol's native token is used for the following purposes:
+
 1. Proof-of-stake reward
 Validators can stake with the token and receive block reward proportional to stake.
 2. Fee Distribution
@@ -239,7 +242,7 @@ Token holders may receive discount on exchange fees.
 5. Governance
 Reference [Coordinator Contract Governance](#coordinator-contract-governance)
 
-More information regarding the token economics can be found [here](INSERT LINK TO TOKENECONOMICSPAPER HERE)
+
 ## Miscellaneous
 
 ### Front-Running Prevention
