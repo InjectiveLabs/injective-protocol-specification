@@ -91,33 +91,57 @@ The procedure involved with each action is described below, with each procedure 
 5. The make order in question is marked as soft-cancelled and take orders in the pending queue which include the soft-cancelled make order are removed. 
 
 #### Trading Pair Creation 
-TBD; determine mechanism design for accepting trading pairs through governance mechanism  
+TBD; determine mechanism design for accepting trading pairs through governance mechanism  .
+
+Currently trade pair can be created during the genesis transaction and using `MsgCreateTradePair`.
 
 - requires filter contract sufficient balance
+- trade pairs are stored by hash of the asset data
+- asset data must match either ERC20, ERC721 or other supported asset types
 
 #### Trading Pair Suspension
 TBD; determine suspension mechanism of trading pair through 1) governance procedure or 2) unplanned FC failure
 
+Currently trade pair can be suspended by any validator using `MsgSuspendTradePair`
+
 #### Trading Pair Resumption
 TBD; determine resumption mechanism of trading pair through 1) governance procedure
+
+Currently trade pair can be resumed by any validator using `MsgResumeTradePair`
 
 #### Tendermint Procedure
 1. Each sidechain node calls [CheckTx](https://tendermint.com/docs/app-dev/abci-spec.html#checktx) on the transaction which performs [standard Tendermint checks](https://github.com/cosmos/cosmos-sdk/blob/master/docs/basics/tx-lifecycle.md#addition-to-mempool) on the transaction and adds/discards the transaction to the mempool.
 2. Nodes reach consensus on on which transactions to include in each round through [Tendermint BFT](https://tendermint.com/docs/spec/consensus/consensus.html) and commit to a new block, fully executing the state transitions from each transaction.
    1. Each order message (transaction) is routed to its designated handler function which performs further checks and executes changes to the application store. 
 
-
 ### Relayer API
 Each relayer can optionally support their own API allowing for 1) submission of orders to the sidechain and 2) query of data of the application state. The following implementation is provided out-of-the-box for relayers to use, but each relayer is free to provide their own API for their desired use case. 
 
-https://app.swaggerhub.com/apis/InjectiveLabs/injective-tendermint_external_and_internal_api/1.0.0
+Overall API documentation: [Injective Relayer API — Swagger](https://injective-tendermint-external-and-internal-api-2.api-docs.io/undefined/api/orderbyhash-relayer). The API surface is split into two namespaces:
 
-**TODO**: fill details about relayer API
+Please note, that:
+
+* `/api/v2` is a strict [Standard Relayer API v2](https://github.com/0xProject/standard-relayer-api/blob/master/http/v2.md) implementation for [Decentralized Orderbook](#decentralized-orderbook);
+* `/api/rest` is a group of useful methods for Relayer management and custom scenarios, simply REST API.
 
 ### Trade Execution Coordination
 ** TODO**
-#### Eth-Tx Module
-Each full-node of the sidechain 
+
+#### Relayer Accounts and Eth-Tx Modules
+
+A full validator node of the sidechain includes two important modules that are in charge of the propagation of matched orders onto the Ethereum state.
+
+Relayer accounts module `x/accounts` is responsible for tracking online status of each active validators that are currently connected. This module prevents selecting an offline validator for order submission to Ethereum, when, for instance, validator has turned off its client gracefully or his node is in pending shutfown state.
+
+To manage status and graceful "log-in"s and "log-off"s the module allows a validator node to periodically send `MsgPing` transaction with current timestamp and version tag. It also allows to send `MsgLogOff` transaction to gracefully set its status to offline. The accounts module provides methods for selecting a pool of currently active peers within given timeframe and whose version tag is matching. A filtered pool of online peers allows to work only with validators that are ready to process Ethereum transactions in the nearest future.
+
+Ethereum Tx module `x/ethtx` provides the main consensus engine for selecting Tx submitters and Tx reviewers. For each new block (implements `EndBlocker`) it chooses a new submitter, based on the pool of online validators for the current height, returned by `x/accounts`. Since all tendermint nodes are executing the same logic on the same state, and the list of online peers is written in that state, they will always have consensus on 1) who's a submitter for the current block 2) who has been a submitter for block height N in the past.
+
+So, when a validator is ready to end a block, `x/ethtx` decides whether that validator is a submitter, or is a reviewer.
+
+**1)** If selected as **submitter** (only one per block), the validator will query orders pending for submission usign `x/orders`, encode and sign an Ethereum transaction that submits batched orders to coodinator contract, deliver that transaction to Geth instance or similar JSON-RPC API (Alchemy, Infura), write the transaction hash into the sidechain state using `MsgSubmitTxHash`.
+
+**2)** If selected as **reviewer** (the rest of peers), the validator will look back into history of N blocks, find a corresponding submitter for that block and get the tx hash. Then it will query Ethereum state for this tx hash and check if transaction is properly submitted and all order hashes are matching the list of pending orders for that past block of sidechain. If ok, then validator must submit a review to sidechain using `MsgSubmitReview`. All reviewers must submit a review. If verification has failed, a slashing must be done (TBD).
 
 ### Validator Requirements
 ** TODO** 
