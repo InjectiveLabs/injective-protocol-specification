@@ -39,23 +39,21 @@ Injective Protocol is a fully decentralized exchange protocol built on top of Et
 * gasless transactions
 
 ## Architecture
-The protocol is comprised of three principal components: 1) the Injective sidechain relayer network, 2) Injective's filter contract (smart contract on Ethereum), and (optionally) 3) a front end interface. In this setup, the front end interface is used to communicate orders to and from the sidechain relayer network which serves as a decentralized orderbook and trade execution coordinator (TEC). The sidechain relayer network aggregates trades in a canonical ordering (preventing front-running) and then submits the trades on Injective's trade execution [coordinator contract](https://github.com/0xProject/0x-protocol-specification/blob/master/v2/v2-specification.md#filter-contracts) which in turn executes and settles the trades on 0x. 
+The protocol is comprised of three principal components: 1) the Injective sidechain relayer network, 2) Injective's trade execution coordinator contract (a smart contract on Ethereum), and (optionally) 3) a graphical front-end interface. Injective Protocol provides a fully decentralized sidechain relayer network which serves as a decentralized orderbook and trade execution coordinator (TEC). Individuals can communicate orders/trades (e.g. through a front-end interface) to the sidechain relayer network which aggregates trades in a canonical manner which prevents front-running and then submits the on Injective's trade execution [coordinator contract](https://github.com/0xProject/0x-protocol-specification/blob/master/v2/v2-specification.md#filter-contracts) which in turn executes and settles the trades through 0x.
 
 <img alt="architecture.png" src="https://github.com/InjectiveLabs/injective-protocol-specification/blob/master/.gitbook/assets/architecture.png?raw=true" width="700px"/>
 
-## Sidechain
+Injective Protocol uses an application-specific sidechain relayer network to maintain a decentralized orderbook, front-running resistant trade execution coordinator, and order matching and execution engine. 
 
-Injective Protocol uses an application-specific sidechain relayer network to maintain a decentralized orderbook, front-running resistant trade execution coordinator, and order matching and execution engine. We refer to our model as **sidechain order relay with on-chain settlement** - a decentralized implementation of the traditionally centralized [off-chain order relay](https://github.com/0xProject/0x-protocol-specification/blob/master/v2/v2-specification.md#architecture) used by nearly all central limit order book decentralized exchanges. The sidechain is built on top of Tendermint and the application logic is implemented using the Cosmos SDK. 
+We refer to our exchange model as **sidechain order relay with on-chain settlement** - a decentralized implementation of the traditionally centralized [off-chain order relay](https://github.com/0xProject/0x-protocol-specification/blob/master/v2/v2-specification.md#architecture) used by nearly all central limit order book decentralized exchanges. 
 
-### Decentralized Orderbook
+## Decentralized Orderbook
 
 The Injective sidechain hosts a decentralized, censorship-resistant orderbook which stores and relays orders. The application logic for the orderbook is in the [`orders`](https://github.com/InjectiveLabs/injective-core/tree/master/cosmos/x/orders) module which supports six distinct actions (i.e. state transitions in the form of [Msgs](https://godoc.org/github.com/cosmos/cosmos-sdk/types#Msg)): [make order creation](#make-order-creation), [take order creation](#take-order-creation), [soft cancel](#soft-cancel), [trading pair creation](#trading-pair-creation), [trading pair suspension](#trading-pair-suspension), and [trading pair resumption](#trading-pair-resumption). 
 
-**TODO**: add take order fill, make order remove
+Each action results in a  [Tendermint procedure](#tendermint-procedure) (which we briefly include for completeness of understanding). Further documentation on the orders module and Tendermint can be found [here](https://github.com/InjectiveLabs/injective-core/blob/master/cosmos/x/orders/README.md) and [here](https://tendermint.com/docs/introduction/) respectively. 
 
-The procedure involved with each action is described below, with each procedure for the above being followed by the [Tendermint procedure](#tendermint-procedure) (which we briefly include for completeness of understanding). Further documentation on the orders module and Tendermint can be found [here](https://github.com/InjectiveLabs/injective-core/blob/master/cosmos/x/orders/README.md) and [here](https://tendermint.com/docs/introduction/) respectively. 
-
-#### Make Order Creation
+#### Make Order Creation Steps
 1. A valid signed make order is created
 2. The order is submitted to the sidechain through a HTTP POST call to a relayer's endpoint which then forwards the order to the network
 3. The relayer performs validation on the order and checks that:
@@ -72,7 +70,7 @@ The procedure involved with each action is described below, with each procedure 
 4. The relayer broadcasts a [Tendermint/Cosmos SDK Tx](https://github.com/cosmos/cosmos-sdk/blob/master/types/tx_msg.go#L34-L38) containing the order to its peers in the sidechain network (assuming step 3 passes)
 5. The make order msg is handled and added to the orderbook
 
-#### Take Order Creation
+#### Take Order Creation Steps
 1. A valid signed take order is created
 2. The order is submitted to the sidechain through a HTTP POST call to a relayer's endpoint which then forwards the order to the network
 3. The relayer performs the same validation of the order as in the make order prodedure and also checks that:
@@ -83,28 +81,29 @@ The procedure involved with each action is described below, with each procedure 
 4. The relayer broadcasts a [Tendermint/Cosmos SDK Tx](https://github.com/cosmos/cosmos-sdk/blob/master/types/tx_msg.go#L34-L38) containing the order to its peers in the sidechain network (assuming step 3 passes)
 5. The take order msg is handled and added to the pending queue of take orders to be submitted for that block
 
-#### Soft Cancel Creation
+#### Soft Cancel Creation Steps
 1. A valid signed cancel order is created
 2. The order is submitted to the sidechain through a HTTP POST call to a relayer's endpoint which then forwards the order to the network
 3. The relayer validates the cancel order 
 4. The relayer broadcasts a [Tendermint/Cosmos SDK Tx](https://github.com/cosmos/cosmos-sdk/blob/master/types/tx_msg.go#L34-L38) containing the order to its peers in the sidechain network (assuming step 3 passes)
 5. The make order in question is marked as soft-cancelled and take orders in the pending queue which include the soft-cancelled make order are removed. 
 
-#### Trading Pair Creation 
-TBD; determine mechanism design for accepting trading pairs through governance mechanism  .
+#### Trading Pair Creation Steps 
+Injective will determine the proper governance and mechanism design for accepting trading pairs. <!---TODO!-->
 
-Currently trade pair can be created during the genesis transaction and using `MsgCreateTradePair`.
+
+Currently trading pairs can be created during the genesis transaction and using `MsgCreateTradePair`.
 
 - requires filter contract sufficient balance
 - trade pairs are stored by hash of the asset data
 - asset data must match either ERC20, ERC721 or other supported asset types
 
-#### Trading Pair Suspension
+#### Trading Pair Suspension Steps
 TBD; determine suspension mechanism of trading pair through 1) governance procedure or 2) unplanned FC failure
 
 Currently trade pair can be suspended by any validator using `MsgSuspendTradePair`
 
-#### Trading Pair Resumption
+#### Trading Pair Resumption Steps
 TBD; determine resumption mechanism of trading pair through 1) governance procedure
 
 Currently trade pair can be resumed by any validator using `MsgResumeTradePair`
