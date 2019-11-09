@@ -40,12 +40,12 @@ The exchange protocol implements 0x order schema on Ethereum and can be easily i
 The protocol's [native token](#token-economics) will be used to maintain proof-of-stake security on the sidechain, reward order discovery and origination for nodes, and allow token holders to capture value on the success of the protocol via a token burn or distribution mechanism. The exchange protocol does not collect fees in native token by default but rather implements a negative spread model like most of the traditional centralized exchanges. The fees collected will undergo a periodic auction enforced on a smart contract to buy back the native token.
 
 
-* describe problem
+<!-- * describe problem
 * fully-decentralized, open, permissionless
 * front-running proof
 * native token
 * 0x trades, extensible to arbitrary DeFi
-* gasless transactions
+* gasless transactions -->
 
 ## Architecture
 The protocol is comprised of three principal components: 1) the Injective sidechain relayer network, 2) Injective's trade execution coordinator contract (a smart contract on Ethereum), and (optionally) 3) a graphical front-end interface. Injective Protocol provides a fully decentralized sidechain relayer network which serves as a decentralized orderbook and trade execution coordinator (TEC). Individuals can communicate orders/trades (e.g. through a front-end interface) to the sidechain relayer network which aggregates trades in a canonical manner which prevents front-running and then submits the on Injective's trade execution [coordinator contract](https://github.com/0xProject/0x-protocol-specification/blob/master/v2/v2-specification.md#filter-contracts) which in turn executes and settles the trades through 0x.
