@@ -1,6 +1,9 @@
 # Table of contents
 
+* [Introduction](README.md)
+
 ## Overview
+
 * [Introduction](overview/intro.md)
 * [Architecture](overview/architecture.md)
 * [Sidechain](overview/sidechain.md)
@@ -9,10 +12,9 @@
 * [Governance](overview/governance.md)
 * [Token Economics](overview/token-economics.md)
 * [Miscellaneous](overview/miscellaneous.md)
-
-## Validators
-* [Getting Started](validators/README.md)
+* [Getting Started](validators.md)
 
 ## Developers
+
 * [Sending Testnet Transactions](developers/testnet.md)
 

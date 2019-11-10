@@ -1,31 +1,35 @@
 # Sending Testnet Transactions
 
-Our testnet is a Tendermint based sidechain but abstracts away the necessity for users to send Tendermint style transactions. To perform actions on our sidechain (e.g. creating orders, placing trades, canceling orders, etc.) users can simply send HTTP requests to any relayer which runs our `relayer-api` REST server which is compliant with the [0x v2 Standard Relayer API specification](https://github.com/0xProject/standard-relayer-api/blob/master/http/v2.md). 
+Our testnet is a Tendermint based sidechain but abstracts away the necessity for users to send Tendermint style transactions. To perform actions on our sidechain \(e.g. creating orders, placing trades, canceling orders, etc.\) users can simply send HTTP requests to any relayer which runs our `relayer-api` REST server which is compliant with the [0x v2 Standard Relayer API specification](https://github.com/0xProject/standard-relayer-api/blob/master/http/v2.md).
 
-The full OpenAPI specification can be found [here](https://injective-tendermint-external-and-internal-api-2.api-docs.io/undefined/api). 
+The full OpenAPI specification can be found [here](https://injective-tendermint-external-and-internal-api-2.api-docs.io/undefined/api).
 
-### GetAccount
+## GetAccount
+
 ```bash
-$ curl "http://testnet-validator-1.injective.dev/api/private/getAccount?address=cosmos1nsm4jltjmjwfah3xxzfcv4r2za3qtt4mhqp2h9"
+$ curl "https://testnet-api.injective.dev/api/rest/getAccount?address=cosmos1nsm4jltjmjwfah3xxzfcv4r2za3qtt4mhqp2h9"
 ```
 
-### GetOnlineAccounts
+## GetOnlineAccounts
+
 ```bash
-$ curl "http://testnet-validator-1.injective.dev/private/getOnlineAccounts?threshold=60"
+$ curl "https://testnet-api.injective.dev/api/rest/getOnlineAccounts?threshold=60"
 ```
-### GetEthTransactions
+
+## GetEthTransactions
+
 ```bash
-$ curl -X "POST" "http://testnet-validator-1.injective.dev/getEthTransactions" \
+$ curl -X "POST" "https://testnet-api.injective.dev/api/rest/getEthTransactions" \
      -H 'Content-Type: application/json; charset=utf-8' \
      -d $'{
   "proposer": "cosmos15ujfj08ny209krcxyls423y5lfxmpxxv6klrpw"
 }'
 ```
 
-### PostOrder
+## PostOrder
 
 ```bash
-$ curl -X "POST" "http://testnet-validator-1.injective.dev/postOrder" \
+$ curl -X "POST" "https://testnet-api.injective.dev/api/v2/postOrder" \
      -H 'Authorization: Bearer' \
      -H 'Content-Type: application/json; charset=utf-8' \
      -d $'{
@@ -45,9 +49,11 @@ $ curl -X "POST" "http://testnet-validator-1.injective.dev/postOrder" \
   "takerAssetData": "0xf47261b00000000000000000000000000b1ba0af832d7c05fd64161e0db78e85978e8082"
 }'
 ```
-### TakeOrder
+
+## TakeOrder
+
 ```bash
-$ curl -X "POST" "http://testnet-validator-1.injective.dev/takeOrder" \
+$ curl -X "POST" "https://testnet-api.injective.dev/api/v2/takeOrder" \
      -H 'Content-Type: application/json; charset=utf-8' \
      -d $'{
   "makeOrders": [
@@ -87,33 +93,50 @@ $ curl -X "POST" "http://testnet-validator-1.injective.dev/takeOrder" \
 }'
 ```
 
-### GetOrder
+## Orderbook
+
 ```bash
-$ curl "http://testnet-validator-1.injective.dev/getOrder?orderHash=0x40c215ad7c180f5c30145b64c4c987b012af66996cb9288e3a6ae621db8fedf2"
+curl "https://testnet-api.injective.dev/api/v2/orderbook?baseAssetData=0xf47261b0000000000000000000000000e1703da878afcebff5b7624a826902af475b9c03&quoteAssetData=0xf47261b00000000000000000000000000b1ba0af832d7c05fd64161e0db78e85978e8082"
 ```
-### GetActiveOrder
+
+## GetOrder
+
 ```bash
-$ curl "http://testnet-validator-1.injective.dev/getActiveOrder?orderHash=0x40c215ad7c180f5c30145b64c4c987b012af66996cb9288e3a6ae621db8fedf2"
+$ curl "https://testnet-api.injective.dev/api/v2/getOrder?orderHash=0x40c215ad7c180f5c30145b64c4c987b012af66996cb9288e3a6ae621db8fedf2"
 ```
-### GetArchiveOrder
+
+## GetActiveOrder
+
 ```bash
-$ curl "http://testnet-validator-1.injective.dev/getArchiveOrder?orderHash=0x40c215ad7c180f5c30145b64c4c987b012af66996cb9288e3a6ae621db8fedf2"
+$ curl "https://testnet-api.injective.dev/api/rest/getActiveOrder?orderHash=0x40c215ad7c180f5c30145b64c4c987b012af66996cb9288e3a6ae621db8fedf2"
 ```
-### ListOrders
+
+## GetArchiveOrder
+
 ```bash
-$ curl -X "POST" "http://testnet-validator-1.injective.dev/listOrders" \
+$ curl "https://testnet-api.injective.dev/api/rest/getArchiveOrder?orderHash=0x40c215ad7c180f5c30145b64c4c987b012af66996cb9288e3a6ae621db8fedf2"
+```
+
+## ListOrders
+
+```bash
+$ curl -X "POST" "https://testnet-api.injective.dev/api/rest/listOrders" \
      -H 'Content-Type: application/json; charset=utf-8' \
      -d $'{}'
 ```
-### GetTradePair
+
+## GetTradePair
+
 ```bash
-$ curl "http://testnet-validator-1.injective.dev/getTradePair?name=MOCK%2FWETH" \
+$ curl "https://testnet-api.injective.dev/api/rest/getTradePair?name=MOCK%2FWETH" \
      -H 'Content-Type: application/json; charset=utf-8' \
      -d $'{}'
 ```
-### ListTradePairs
+
+## ListTradePairs
+
 ```bash
-$ curl -X "POST" "http://testnet-validator-1.injective.dev/listTradePairs" \
+$ curl -X "POST" "https://testnet-api.injective.dev/api/rest/listTradePairs" \
      -H 'Content-Type: application/json; charset=utf-8' \
      -d $'{}'
 ```

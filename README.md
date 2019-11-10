@@ -1,3 +1,4 @@
-# Injective Protocol 1.0.0 Specification 
+# Introduction
 
-Please visit [docs.injectiveprotocol.com](http://docs.injectiveprotocol.com/) to view our full specification. 
+Please visit [docs.injectiveprotocol.com](http://docs.injectiveprotocol.com/) to view our full specification.
+
