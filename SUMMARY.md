@@ -10,5 +10,5 @@
 
 ## Developers
 
-* [Injective Core](developers/README.md)
+* [Sending Testnet Transactions](developers/README.md)
 
