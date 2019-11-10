@@ -125,7 +125,7 @@ Currently trade pair can be resumed by any validator using `MsgResumeTradePair`
 ### Relayer API
 Each relayer can optionally support their own API allowing for 1) submission of orders to the sidechain and 2) query of data of the application state. The following implementation is provided out-of-the-box for relayers to use, but each relayer is free to provide their own API for their desired use case. 
 
-Overall API documentation: [Injective Relayer API — Swagger](https://injective-tendermint-external-and-internal-api-2.api-docs.io/undefined/api/orderbyhash-relayer). The API surface is split into two namespaces:
+Overall API documentation: [Injective Relayer API ](https://injective-tendermint-external-and-internal-api-2.api-docs.io/undefined/api). The API surface is split into two namespaces:
 
 Please note, that:
 
