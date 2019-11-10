@@ -14,5 +14,5 @@
 * [Getting Started](validators/README.md)
 
 ## Developers
-* [Sending Testnet Transactions](developers/README.md)
+* [Sending Testnet Transactions](developers/testnet.md)
 
