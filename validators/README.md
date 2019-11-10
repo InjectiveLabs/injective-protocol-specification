@@ -1,6 +1,5 @@
 ### Validator Requirements (Work in Progress)
 To become a validator of the Injective sidechain, the participants have to accumulate more tokens than the minimum stake amount outlined in the protocol. The validator has the responsibility of proposing and verifying the sidechain block, facilitating the propagation, matching, and submission of orders. We utilize [Tendermint](https://cosmos.network/docs/cosmos-hub/validators/validator-faq.html#becoming-a-validator) consensus for the block production and validator selection process.
-<!--https://docs.google.com/document/d/1PUnhciynPqXhyQqtywL5PeTz9mSDGWklp4-U7OajX-s/edit?pli=1#heading=h.ohv3ez9ge57k-->
 
 #### Registration and Stake
 The participants will submit a request `create-validator` on the sidechain to become validators. If the participants satisfy the requirements (most notably the `minimum self-delegation` amount or generally known as the minimum stake amount), they will be elidgible to become validators after a predefined number of blocks are mined. Once a participant becomes a validator, other participants in the sidechain can also delegate stakes to the validator's staking pool. Since our sidechain interacts with Ethereum, the validators and delegators alike will need to include their Ethereum address in their requests as well.
