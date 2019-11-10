@@ -1,14 +1,14 @@
 # Table of contents
 
 ## Overview
-* [Introduction](intro.md)
-* [Architecture](README.md#architecture)
-* [Sidechain](sidechain.md)
-* [Injective Contracts](contracts.md)
-* [Interface](interface.md)
-* [Governance](governance.md)
-* [Token Economics](token-economics.md)
-* [Miscellaneous](miscellaneous.md)
+* [Introduction](overview/intro.md)
+* [Architecture](overview/architecture.md)
+* [Sidechain](overview/sidechain.md)
+* [Injective Contracts](overview/contracts.md)
+* [Interface](overview/interface.md)
+* [Governance](overview/governance.md)
+* [Token Economics](overview/token-economics.md)
+* [Miscellaneous](overview/miscellaneous.md)
 
 ## Validators
 * [Getting Started](validators/README.md)
