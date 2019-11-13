@@ -7,7 +7,7 @@ The full OpenAPI specification can be found [here](https://injective-tendermint-
 ## GetAccount
 
 ```bash
-$ curl "https://testnet-api.injective.dev/api/rest/getAccount?address=cosmos1nsm4jltjmjwfah3xxzfcv4r2za3qtt4mhqp2h9"
+$ curl "https://testnet-api.injective.dev/api/rest/getAccount?address=cosmos1qdceypuukd62nlu7qtenah8yfj0zwdzz6kr7el"
 ```
 
 ## GetOnlineAccounts
@@ -22,7 +22,7 @@ $ curl "https://testnet-api.injective.dev/api/rest/getOnlineAccounts?threshold=6
 $ curl -X "POST" "https://testnet-api.injective.dev/api/rest/getEthTransactions" \
      -H 'Content-Type: application/json; charset=utf-8' \
      -d $'{
-  "proposer": "cosmos15ujfj08ny209krcxyls423y5lfxmpxxv6klrpw"
+  "proposer": "cosmos1qdceypuukd62nlu7qtenah8yfj0zwdzz6kr7el"
 }'
 ```
 
@@ -33,13 +33,13 @@ $ curl -X "POST" "https://testnet-api.injective.dev/api/v2/postOrder" \
      -H 'Authorization: Bearer' \
      -H 'Content-Type: application/json; charset=utf-8' \
      -d $'{
-  "expirationTimeSeconds": "1571309285",
+  "expirationTimeSeconds": "1971309285",
   "feeRecipientAddress": "0x0000000000000000000000000000000000000000",
   "takerAssetAmount": "9998000000000000",
   "takerFee": "0",
   "exchangeAddress": "0x48bacb9266a570d521063ef5dd96e61686dbe788",
   "makerFee": "0",
-  "takerAddress": "0xb125995f5a4766c451cd8c34c4f5cac89b724571",
+  "takerAddress": "0x449d72EE5623791e42aA4B538D0773eF0a8686E7",
   "salt": "1915",
   "signature": "0x1c69937ac0397f9075cb528a84b809ecddadfc0f971392d1512d9ea2147d270fb36be17105a8d97fe9833a135fc6ca498315832f604ad772ddc859af3ea6383ce403",
   "makerAddress": "0x6ecbe1db9ef729cbe972c83fb886247691fb6beb",
