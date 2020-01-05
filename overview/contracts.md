@@ -11,7 +11,7 @@ The flow for filling an order with our coordinator model is as follows:
 3. The coordinator contract verifies negative spread on each trade and executes the trades on 0x. 
 4. The coordinator contract returns [`FillResults[]`](https://github.com/0xProject/0x-protocol-specification/blob/master/v2/v2-specification.md#fillresults). 
 
-![trade-flow.png](https://github.com/InjectiveLabs/injective-protocol-specification/blob/master/.gitbook/assets/trade-flow.png?raw=true)
+![](../.gitbook/assets/trade-flow.png)
 
 ## Negative Spread
 
