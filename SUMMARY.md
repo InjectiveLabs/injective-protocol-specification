@@ -12,7 +12,7 @@
 * [Governance](overview/governance.md)
 * [Token Economics](overview/token-economics.md)
 * [Miscellaneous](overview/miscellaneous.md)
-* [Getting Started](validators.md)
+* [Getting Started](overview/validators.md)
 
 ## Developers
 

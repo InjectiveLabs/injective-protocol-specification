@@ -10,5 +10,3 @@ We additionally provide another implementation which is a fork of the [0x-launch
 
 * [**Injective launch kit implementation**](https://github.com/InjectiveLabs/0x-frontend)
 
-
-
