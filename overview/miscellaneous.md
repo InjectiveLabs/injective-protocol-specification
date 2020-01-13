@@ -6,7 +6,7 @@
 
 ### Implementation
 
-In our protocol,`t` is the time parameter for proof of elapsed time. In the context of Sloth, `t` is the number of modular square root evaluation. `t` can be computed incrementally for it to become a time proof.
+In our protocol,$$t$$ is the time parameter for proof of elapsed time. In the context of Sloth, `t` is the number of modular square root evaluation. `t` can be computed incrementally for it to become a time proof.
 
 After submitting the take order information adhering to 0x schema, the user will generate `x` value by creating the `orderHash` from `Order`.
 
