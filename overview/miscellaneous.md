@@ -12,7 +12,7 @@ In our protocol,$$t$$ is the time parameter for proof of elapsed time, which in 
 
 After submitting the take order information adhering to 0x schema, the user will generate $$x$$ value by creating the $$orderHash$$ from $$Order$$.
 
-Using $$x$$, the user begins to calculate VDF \(Sloth for example\): $$sqrt(x)\to y , sqrt(y) \to  y_1 , sqrt(y_1)\to y_2 ...$$ until it reaches a satisfactory checkpoint $$y_t$$. The user then submits $$y_t, t , x , Hash(order)$$ to a relayer so that it can map them to the order information the user submitted previously. The relayer will then perform $$vdf_{verify}$$. to ensure the validity of the user's VDF proof. In sloth's case, the relayer can simply verify that $$((y_t)^2)^{(t+1)}=x$$.
+Using $$x$$, the user begins to calculate VDF \(Sloth for example\): $$y \leftarrow msqrt(x), y_1 \leftarrow msqrt(y), y_2 \leftarrow msqrt(y_1)$$ where $$msqrt(x) = x^{ \frac{(p + 1)}{4}} \mod p$$ $$t$$ times until the user thus obtains $$y_t$$. The user then submits $$(y_t, t , x)$$ to a relayer. The relayer will then perform $$vdf_{verify}$$. to ensure the validity of the user's VDF proof. In sloth's case, the relayer can simply verify that $$((y_t)^2)^{(t+1)}=x$$.
 
 After $$vdf_{verify}$$, the relayer will append $$t$$ to the user's existing order information. Since traders are allowed to submit multiple transactions for time proofs \(ex: $$tx_1: \{y_t , t ,x\} tx_2: \{y_2t , 2t , x\} tx_3: \{y_3t , 3t , x\}$$\), the relayer should also check if the $$t$$ is bigger than the existing $$t$$ attached to the trader's information before performing any VDF verification.
 
@@ -34,7 +34,7 @@ We created `Sloth_fixed_delay` for testing purposes.
 
 Prime number $$p$$, starting value $$x$$, and $$t$$ iteration count and outputs $$y_t$$ or ending value at iteration $$t$$. 
 
-$$Sloth_verify$$ takes in Prime number $$p$$, starting value $$x$$, iteration count $$t$$, ending value $$y_t$$ and outputs the boolean result of the verification. 
+$$Sloth_{verify}$$ takes in Prime number $$p$$, starting value $$x$$, iteration count $$t$$, ending value $$y_t$$ and outputs the boolean result of the verification. 
 
 Within this file, we have stored a few prime numbers for demonstration purposes, these numbers will not be in production.
 
