@@ -1,6 +1,10 @@
 # Sidechain
 
-The Injective sidechain hosts a decentralized, censorship-resistant orderbook which stores and relays orders. The application logic for the orderbook is in the [`orders`](https://github.com/InjectiveLabs/injective-core/tree/master/cosmos/x/orders) module which supports six distinct actions \(i.e. state transitions in the form of [Msgs](https://godoc.org/github.com/cosmos/cosmos-sdk/types#Msg)\): [make order creation](sidechain.md#make-order-creation), [take order creation](sidechain.md#take-order-creation), [soft cancel](sidechain.md#soft-cancel), [trading pair creation](sidechain.md#trading-pair-creation), [trading pair suspension](sidechain.md#trading-pair-suspension), and [trading pair resumption](sidechain.md#trading-pair-resumption).
+The Injective sidechain hosts a decentralized, censorship-resistant orderbook which stores and relays orders. 
+
+
+
+The application logic for the orderbook is in the [`orders`](https://github.com/InjectiveLabs/injective-core/tree/master/cosmos/x/orders) module which supports six distinct actions \(i.e. state transitions in the form of [Msgs](https://godoc.org/github.com/cosmos/cosmos-sdk/types#Msg)\): [make order creation](sidechain.md#make-order-creation), [take order creation](sidechain.md#take-order-creation), [soft cancel](sidechain.md#soft-cancel), [trading pair creation](sidechain.md#trading-pair-creation), [trading pair suspension](sidechain.md#trading-pair-suspension), and [trading pair resumption](sidechain.md#trading-pair-resumption).
 
 Each action results in a [Tendermint procedure](sidechain.md#tendermint-procedure) \(which we briefly include for completeness of understanding\). Further documentation on the orders module and Tendermint can be found [here](https://github.com/InjectiveLabs/injective-core/blob/master/cosmos/x/orders/README.md) and [here](https://tendermint.com/docs/introduction/) respectively.
 

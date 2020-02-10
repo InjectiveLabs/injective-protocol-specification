@@ -6,7 +6,7 @@
 
 * [Introduction](overview/intro.md)
 * [Architecture](overview/architecture.md)
-* [Sidechain](overview/sidechain.md)
+* [Injective Chain](overview/injective-chain.md)
 * [Injective Contracts](overview/contracts.md)
 * [Interface](overview/interface.md)
 * [Governance](overview/governance.md)
