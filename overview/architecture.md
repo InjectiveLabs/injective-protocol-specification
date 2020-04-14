@@ -1,4 +1,4 @@
-# Injective Protocol Architecture
+# Injective Protocol Architecture Overview
 
 Injective Protocol is comprised of four principal components: 
 
@@ -30,10 +30,33 @@ The Injective Chain provides a two-way Ethereum peg-zone for Ether and ERC-20 to
 
 ### Trade Execution Coordinator
 
-The Injective Trade Execution Coordinator (TEC) is a decentralized coordinator implementation based off the [0x 3.0 Coordinator](https://github.com/0xProject/0x-protocol-specification/blob/master/v3/coordinator-specification.md) specification. The Injective TEC safeguards trades from front-running and enables lower-latency trading through soft-cancellations. 
+The Injective Trade Execution Coordinator (TEC) is a decentralized coordinator implementation based off the [0x 3.0 Coordinator](https://github.com/0xProject/0x-protocol-specification/blob/master/v3/coordinator-specification.md) specification. The Injective TEC safeguards trades from front-running using Verifiable Delay Functions and enables lower-latency trading through soft-cancellations. 
 
 ### Decentralized Orderbook
 
 Injective's Decentralized Orderbook is a fully decentralized 0x-based orderbook enabling **sidechain order relay with on-chain settlement** - a decentralized implementation of the traditionally centralized [off-chain order relay](https://github.com/0xProject/0x-protocol-specification/blob/master/v2/v2-specification.md#architecture) used by nearly all central limit order book decentralized exchanges. 
 
 Nodes of the Injective Chain host a decentralized, censorship-resistant orderbook which stores and relays orders. 
+
+## Injective API
+
+Injective API nodes have two purposes: 1) providing transaction creation and relay and 2) serving as a data layer for the protocol. 
+
+**Transaction Creation and Relay**
+
+SRAv3, Coordinator, Derivatives 
+
+
+
+**Data Layer**
+
+GUI supporting API, Analytics server, BadgerDB based 
+
+## Injective Contracts
+
+Injective Coordinator Contract, Staking Contract, Registry, Futures Protocol Implementation, Bridge Contracts, Token Contract
+
+## Frontend Interface
+
+Injective Protocol is a fully decentralized protocol which allows for individuals to access the protocol in a permisssionless manner. Injective provides an open-source sample frontend interface which individuals or companies can run locally or host on a web-server to interface with the protocol. This interface is also deployed on IPFS. 
+
