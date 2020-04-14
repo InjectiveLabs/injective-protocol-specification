@@ -13,13 +13,3 @@ The flow for filling an order with our coordinator model is as follows:
 
 ![](../.gitbook/assets/trade-flow.png)
 
-## Negative Spread
-
-A take order along with its corresponding make order\(s\) \(i.e. a "trade"\) must result in bilateral negative spread with spread parameter `p = 1.002` in order to be accepted by the sidechain and coordinator contract.
-
-For two orders `OrderA` and `OrderB`, there exists negative spread if and only if the cost per unit bought \(`OrderA.makerAssetAmount/OrderA.takerAssetAmount`\) is greater than the profit per unit sold of the matched order \(`OrderB.takerAssetAmount / (OrderB.makerAssetAmount * p^2)`\), i.e. the following inequality must hold:
-
-`p^2 * OrderA.makerAssetAmount * OrderB.makerAssetAmount >= OrderA.takerAssetAmount * OrderB.takerAssetAmount`
-
-In our model, due to rounding reasons and limitations in decimal representations in Solidity, we represent `p^2 = 1.002^2` as `1.004`.
-
