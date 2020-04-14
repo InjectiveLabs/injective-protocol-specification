@@ -40,21 +40,37 @@ Nodes of the Injective Chain host a decentralized, censorship-resistant orderboo
 
 ## Injective API
 
-Injective API nodes have two purposes: 1) providing transaction creation and relay and 2) serving as a data layer for the protocol. 
+Injective API nodes have two purposes: 1) providing transaction relay services and 2) serving as a data layer for the protocol. 
 
-**Transaction Creation and Relay**
+**Transaction Relay Service**
 
-SRAv3, Coordinator, Derivatives 
+Although users can directly interact with the Injective Chain by broadcasting a compatible Tendermint transaction encoding a compatible message type, doing so would be cumbersome for most users. To this end, API nodes provide users a simple HTTP and Websocket API to interact with the protocol. The API nodes then formulate the appropriate transactions and relay them to the Injective Chain. 
 
+The Injective API supports the Injective Futures API, the 0x Standard Relayer API version 3 (SRAv3), and the 0x Standard Coordinator API. 
 
+It also provides abstractions for protocol actions including staking, voting and governance. The full specification for these actions can be found [here](). 
 
 **Data Layer**
 
-GUI supporting API, Analytics server, BadgerDB based 
+Injective API nodes also serve as a data layer for external clients. Injective provides a data and analytics API which is out-of-the-box compatible with Injective's sample frontend interface. Although Injective provides the API server as an in-process service based off BadgerDB communicating over gRPC with the Injective Chain node, developers can provide their own implementions for their custom needs (e.g. using a relational database for indexed queries). 
+
+The specification for this API can be found [here](). 
 
 ## Injective Contracts
 
-Injective Coordinator Contract, Staking Contract, Registry, Futures Protocol Implementation, Bridge Contracts, Token Contract
+Injective Protocol is token-based protocol which is inextricably tied to the INJ token (an ERC-20 token). As such, key components of protocol interactions and token economics are implemented through smart contracts. 
+
+Injective Coordinator Contract
+
+Staking Contract
+
+Registry
+
+Injective Futures Protocol
+
+Injective Bridge Contracts
+
+Injective Token Contract
 
 ## Frontend Interface
 
