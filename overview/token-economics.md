@@ -10,7 +10,7 @@ Injective Protocol's native token is used for the following purposes:
 
 2. Fee Distribution
 
-   Exchange fees collected via negative spread model are periodically auctioned off through smart contract to buy back Injective's native token for reward distribution. The tokens are first distributed to nodes or relayers proportional to orders discovered/originated, and then to validators proportional by stake. Part of the tokens may also be burned instead of distributing to validators depending on final implementation. 
+   Exchange fees collected via negative spread model are periodically auctioned off through smart contract to buy back Injective's native token for reward distribution. The tokens are first distributed to nodes or relayers proportional to orders discovered/originated, and then to validators proportional by stake. Part of the tokens may also be burned instead of distributing to validators depending on final implementation.
 
 We will implement these features in future iterations.
 
