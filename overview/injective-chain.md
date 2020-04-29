@@ -45,9 +45,7 @@ This area is under active development and more documentation and developer guide
 
 The Injective Trade Execution Coordinator \(TEC\) is a decentralized coordinator implementation based off the [0x 3.0 Coordinator](https://github.com/0xProject/0x-protocol-specification/blob/master/v3/coordinator-specification.md) specification. The Injective TEC safeguards trades from front-running using Verifiable Delay Functions and enables lower-latency trading through soft-cancellations.
 
-
-
-### Decentralized Orderbook
+# Decentralized Orderbook
 
 Injective's Decentralized Orderbook is a fully decentralized 0x-based orderbook enabling **sidechain order relay with on-chain settlement** - a decentralized implementation of the traditionally centralized [off-chain order relay](https://github.com/0xProject/0x-protocol-specification/blob/master/v2/v2-specification.md#architecture) used by nearly all central limit order book decentralized exchanges.
 
@@ -55,7 +53,6 @@ Nodes of the Injective Chain host a decentralized, censorship-resistant orderboo
 
 
 
-The Injective sidechain hosts a decentralized, censorship-resistant orderbook which stores and relays orders and also serves as a decentralized trade execution coordinator \(TEC\).
+<!---The Injective sidechain hosts a decentralized, censorship-resistant orderbook which stores and relays orders and also serves as a decentralized trade execution coordinator \(TEC\).--->
 
-Each node of the Injective chain runs RelayerDaemon which maintains a decentralized orderbook and trade execution coordinator. Users can interact with the node directly through Tendermint transactions or through the [RelayerAPI](https://api.injective.dev/#operation/Relayer#getAccount) which relayers can optionally support.
-
+<!---Each node of the Injective chain runs RelayerDaemon which maintains a decentralized orderbook and trade execution coordinator. Users can interact with the node directly through Tendermint transactions or through the [RelayerAPI](https://api.injective.dev/#operation/Relayer#getAccount) which relayers can optionally support. --->
