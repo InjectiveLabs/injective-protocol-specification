@@ -1,12 +1,7 @@
 # Interface
 
-Relayers can earn greater rewards by serving hosting an interface that is configured with their relayer API. Injective has provided two open-source front-end interface implementations allowing for users to interact with the protocol through a friendly graphical user interface.
-
-Our first implementation is a comprehensive interface catered towards the general public as well as more advanced users:
+Injective provides a powerful, full-fledged decentralized exchange open-source front-end implemention allowing anyone to run an exchange. The Injective Client is a comprehensive yet friendly graphical user interface catered towards the general public as well as more advanced users:
 
 * [**Injective client implementation**](https://github.com/InjectiveLabs/injective-client)
 
-We additionally provide another implementation which is a fork of the [0x-launch-kit-frontend](https://github.com/0xProject/0x-launch-kit-frontend) adapted to our protocol:
-
-* [**Injective launch kit implementation**](https://github.com/InjectiveLabs/0x-frontend)
-
+Injective’s model instead rewards relayers in the Injective network for sourcing liquidity. By doing so, exchange providers are incentivized to better serve users, competing amongst each other to provide better user experience, thus broadening access to DeFi for users all around the world.
