@@ -1,8 +1,8 @@
 # Sending Testnet Transactions
 
-Our testnet is a Tendermint based sidechain but abstracts away the necessity for users to send Tendermint style transactions. To perform actions on our sidechain \(e.g. creating orders, placing trades, canceling orders, etc.\) users can simply send HTTP requests to any relayer which runs our `relayer-api` REST server which is compliant with the [0x v2 Standard Relayer API specification](https://github.com/0xProject/standard-relayer-api/blob/master/http/v2.md).
+Our testnet is a Tendermint based sidechain but abstracts away the necessity for users to send Tendermint style transactions. To perform actions on our sidechain \(e.g. creating orders, placing trades, canceling orders, etc.\) users can simply send HTTP requests to any relayer which runs our `relayer-api` REST server which is compliant with the [0x v2 Standard Relayer API specification](https://github.com/0xProject/standard-relayer-api/blob/master/http/v3.md).
 
-The full OpenAPI specification can be found [here](https://injective-tendermint-external-and-internal-api-2.api-docs.io/undefined/api).
+The full OpenAPI specification can be found [here](https://api.injective.dev).
 
 ## GetAccount
 
