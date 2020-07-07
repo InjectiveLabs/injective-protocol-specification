@@ -13,6 +13,7 @@ Injective Protocol's native token is used for the following purposes:
    Exchange fees collected via negative spread model are periodically auctioned off through smart contract to buy back Injective's native token for reward distribution. The proceeds from the auction will be burned.
 
 3. Node incentive model
+
    Hosting a node and participating in Relayerd will receive a percentage of fees generated from the orders they discover. This will incentivize nodes to submit VDF time proof on the user's behalf and create a referral system where the user and the node can receive reward and trading fee discounts. 
    
 We will implement these features outside of the core protocol.
