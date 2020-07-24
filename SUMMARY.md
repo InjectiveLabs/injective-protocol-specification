@@ -15,8 +15,9 @@
 * [Getting Started](overview/validators.md)
 
 ## Derivatives Protocol
-* [Perpetuals Protocol](derivatives/derivatives.md)
-* [Architecture](derivatives/overview.md)
+
+* [Injective Perpetuals Protocol](derivatives-protocol/derivatives.md)
+* [Architecture](derivatives-protocol/overview.md)
 
 ## Developers
 
