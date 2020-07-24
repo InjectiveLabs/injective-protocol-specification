@@ -14,6 +14,9 @@
 * [Miscellaneous](overview/miscellaneous.md)
 * [Getting Started](overview/validators.md)
 
+## Derivatives Protocol
+* [Perpetuals Protocol](derivatives/derivatives.md)
+
 ## Developers
 
 * [Sending Testnet Transactions](developers/testnet.md)
