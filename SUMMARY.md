@@ -16,6 +16,7 @@
 
 ## Derivatives Protocol
 * [Perpetuals Protocol](derivatives/derivatives.md)
+* [Architecture](derivatives/overview.md)
 
 ## Developers
 
