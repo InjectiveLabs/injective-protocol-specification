@@ -18,14 +18,16 @@ function fillOrder(
     uint256 quantity,
     uint256 margin,
     bytes memory signature
-) public returns (bytes32) {
+) public returns (bytes32);
 ```
 
 **Logic**
 
 Calling `fillOrder` will perform the following steps:
 
-1. Query the state and status of the order
+1. Query the oracle to obtain the most recent price and funding fee.
+2. Query the state and status of the order
+
 2. Revert if the order is unfillable (invalid context, expired, cancelled, fully filled, invalid signature)
 
 [Initial Margin Requirement](./keyterms.md#initial-margin-requirement)
@@ -37,3 +39,22 @@ This will immediately enter the workflow of establishing two positions - one for
 2. By doing so, the futures contract transfers `margin` amount of the base currency specified by the make order and take order using ERC-20 the `transferFrom` call and deposits the tokens into their balance. 
 
 3. The positions are attempted to be created for both parties. If the following conditions succeed, then the positions are created. If any one of these checks fail the entire transaction is reverted.
+
+
+
+## **Market Orders**
+
+```javascript
+/// @dev marketOrders executes the orders
+/// @param orders Array of order specifications.
+/// @param quantity Desired quantity of contracts to execute.
+/// @param margin Desired amount of margin (denoted in baseCurrency) to use to fill the orders.
+/// @param signatures Proofs that orders have been signed by makers.
+/// @return accountID The accountID of the newly created account, if there is one.
+function marketOrders(
+    LibOrder.Order[] memory orders,
+    uint256 quantity,
+    uint256 margin,
+    bytes[] memory signatures
+) public returns (bytes32);
+```

@@ -24,6 +24,7 @@
 * [Transaction Fees](derivatives/fees.md)
 * [Closing Position](derivatives/closing-position.md)
 * [Liquidation](derivatives/liquidation.md)
+* [Oracle](derivatives/oracle.md)
 * [Examples](derivatives/example.md)
 * [Implementation](derivatives/implementation.md)
 

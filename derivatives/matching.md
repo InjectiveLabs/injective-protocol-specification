@@ -36,14 +36,6 @@
     **Suggested Implementation:** at the end of `postDerivativeOrder`, call `matchDerivativeOrder`, similar to how the end of `postOrder` calls `matchOrder`. 
 
     - can query the same orders querier as regular orders,
-- **Market Orders**
-
-    `marketOrders(orders, quantity, margin, signatures)`
-
-    iterate through orders:
-
-    find fi
-
 - **Position/Account Maintenance**
 
     There are several things that a trader can do to maintain/view his account and positions.
@@ -52,3 +44,5 @@
     2. Query one's free deposits, unrestricted deposits and restricted deposits with `freeDeposits[myAddress]`, `unrestrictedDeposits[myAddress]`, `restrictedDeposits[myAddress]`
     3. Query the filled status of an order with `filled[orderHash]`. 
     4. Deposit more funds into one's account with `depositAccount(accountID, amount)` in order to prevent liquidation. 
+
+
