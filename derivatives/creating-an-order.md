@@ -30,7 +30,7 @@ In a given perpetual market specified by `marketID`, an order encodes the willin
 
 ### getOrderRelevantState
 
-```solidity
+```js
 /// @dev Fetches all order-relevant information needed to validate if the supplied order is fillable.
 /// @param order The order structure
 /// @param signature Signature provided by maker that proves the order's authenticity.
@@ -53,10 +53,12 @@ function getOrderRelevantState(
 {
 ```
 
+
+
 ### getOrderRelevantStates
 
 
-```sol
+```js
 /// @dev Fetches all order-relevant information needed to validate if the supplied orders are fillable.
 /// @param orders Array of order structures
 /// @param signatures Array of signatures provided by makers that prove the authenticity of the orders.
@@ -99,6 +101,8 @@ function getMakerOrderRelevantStates(
         uint256 availableMargin
     )
 ```
+
+
 
 ### OrderInfo
 
