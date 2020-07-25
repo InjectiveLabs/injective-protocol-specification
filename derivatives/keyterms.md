@@ -86,7 +86,7 @@ $$
 {% hint style="info" %} 
 By doing so the net margin deposited is invariant with respect to the **Contract Price** (which is determined by by the p2p market) and only changes with respect to the **Index Price**, satisfying the following:
 $$
-\frac{margin_{long}+margin_{short}}{quantity} \geq 2\cdot P_{index}\cdot initialMargin
+\frac{margin_{long}+margin_{short}}{quantity} \geq 2\cdot P_{index}\cdot initialMarginRatio
 $$
 
 {% endhint %}
