@@ -14,11 +14,12 @@
 * [Miscellaneous](overview/miscellaneous.md)
 * [Getting Started](overview/validators.md)
 
-## Injective Perpetuals Protocol
+## Derivatives
 * [Overview](derivatives/overview.md)
 * [Key Terms](derivatives/keyterms.md)
 * [Architecture](derivatives/arch.md)
 * [Examples](derivatives/example.md)
+* [Implementation](derivatives/implementation.md)
 
 ## Developers
 
