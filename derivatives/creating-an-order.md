@@ -28,9 +28,9 @@ In a given perpetual market specified by `marketID`, an order encodes the willin
 
 # Order Validation 
 
+### getOrderRelevantState
 
-
-```
+```js
 /// @dev Fetches all order-relevant information needed to validate if the supplied order is fillable.
 /// @param order The order structure
 /// @param signature Signature provided by maker that proves the order's authenticity.
@@ -53,10 +53,10 @@ function getOrderRelevantState(
 {
 ```
 
+### getOrderRelevantStates
 
 
-
-```
+```js
 /// @dev Fetches all order-relevant information needed to validate if the supplied orders are fillable.
 /// @param orders Array of order structures
 /// @param signatures Array of signatures provided by makers that prove the authenticity of the orders.
@@ -73,14 +73,36 @@ function getOrderRelevantStates(LibOrder.Order[] memory orders, bytes[] memory s
     bool[] memory isValidSignature
 	);
 ```
+### getMakerOrderRelevantStates
 
-
-
-
+```javascript
+/// @dev Fetches all order-relevant information needed to validate if the supplied orders are fillable.
+/// @param orders Array of order structures
+/// @param signatures Array of signatures provided by makers that prove the authenticity of the orders.
+/// @param makerAddress Address of maker to check.
+/// @return The ordersInfo (array of the hash, status, and `takerAssetAmount` already filled for each order),
+/// fillableTakerAssetAmounts (array of amounts for each order's `takerAssetAmount` that is fillable given all on-chain state),
+/// isValidSignature (array containing the validity of each provided signature), and availableMargin (amount of available
+/// base currency usable as margin after margin needs of the `orders` are satisfied).
+/// NOTE: Expects each of the orders to be of the same marketID, otherwise may return incorrect information
+function getMakerOrderRelevantStates(
+    LibOrder.Order[] memory orders,
+    bytes[] memory signatures,
+    address makerAddress
+)
+    public
+    view
+    returns (
+        LibOrder.OrderInfo[] memory ordersInfo,
+        uint256[] memory fillableTakerAssetAmounts,
+        bool[] memory isValidSignature,
+        uint256 availableMargin
+    )
+```
 
 ### OrderInfo
 
-```
+```js
 struct OrderInfo {
     uint8 orderStatus;                    // Status that describes order's validity and fillability.
     bytes32 orderHash;                    // EIP712 hash of the order (see LibOrder.getOrderHash).
@@ -88,7 +110,7 @@ struct OrderInfo {
 }
 ```
 ### Order Status
-```
+```js
 enum OrderStatus {
     INVALID,
     INVALID_MAKER_ASSET_AMOUNT,
