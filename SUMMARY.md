@@ -17,6 +17,8 @@
 ## Derivatives
 * [Overview](derivatives/overview.md)
 * [Key Terms](derivatives/keyterms.md)
+* [Getting Started](derivatives/getting-started.md)
+* [Orders](derivatives/creating-an-order.md)
 * [Architecture](derivatives/arch.md)
 * [Examples](derivatives/example.md)
 * [Implementation](derivatives/implementation.md)
