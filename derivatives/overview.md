@@ -1,6 +1,3 @@
-# Architecture
-
-The Injective Futures Protocol uses off-chain order relay with on-chain settlement. In this approach, cryptographically signed orders are broadcast to the decentralized orderbook on the Injective Chain. Then, an interested counterparty may inject one or more of these orders into the Injective Futures Protocol contract to execute and settle trades directly to the blockchain. 
 
 # **Orders**
 

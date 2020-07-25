@@ -19,7 +19,8 @@ The reference spot index price of the underlying asset that the derivative contr
 $$
 P_{index}=\mathrm{index\ price\ of\ underlying}
 $$
-### **Contract Price -** 
+### **Contract Price **
+
 The value of the futures contract the position entered/created. This is purely market driven and is set by individuals, independent of the oracle price.
 $$
 P_{contract}=\mathrm{contract\ price}
@@ -40,18 +41,19 @@ A contract refers to the single unit of account for a position in a given direct
 ### **Order** 
 A cryptographically signed message expressing an unilateral agreement to enter into a position under certain specified terms (i.e. make order or take order). 
 ### **Funding** 
-Funding refers to the periodic payments exchanged between the traders that are long or short of a perpetual contract at the end of every funding period (e.g. every 8 hours). When the funding rate is positive, longs pay shorts. When negative, shorts pay longs. 
+Funding refers to the periodic payments exchanged between the traders that are long or short of a perpetual contract at the end of every funding epoch (e.g. every 8 hours). When the funding rate is positive, longs pay shorts. When negative, shorts pay longs. 
 ### **Funding Rate**
 The funding rate value determines the funding fee that positions pay and is based on the difference between the price of the contract in the perpetual swap markets and spot markets. 
 ### **Funding Fee** 
-The funding fee $$f$$ refers to the funding payment that is made for a **single contract** in the market for a given epoch $$i$$ and cumulative funding $$F$$ refers to the cumulative funding for the contract since position entry. 
+The funding fee $$f$$ refers to the funding payment that is made for a **single contract** in the market for a given epoch $$i$$.
 $$
 f_{i} = \mathrm{unit\ funding\ fee\ at\ epoch\ }i
 $$
+Cumulative funding $$F$$ refers to the cumulative funding for the contract since position entry. 
 $$
 F_{entry}= \sum \limits_{i=entry}^{current-1} f_i
 $$
-Hence, $$f_1=0.01$$ means that open long contracts at this time will pay 0.01 units of base currency and $$f_2 = -0.03$$ means that shorts should pay 0.03 units of base currency. 
+
 ### **NPV** 
 Net Present Value of a single contract. For long and short perpetual contracts, the NPV calculation is:
 $$
@@ -63,47 +65,51 @@ $$
 ### **Liquidation ** 
 When an account's **NAV** becomes negative, all of its positions are subject to liquidation, i.e. the forced closure of the position due to a minimum collateral requirement being breached. 
 ### **Liquidation Penalty** 
-The liquidation penalty is a fixed percentage defining the value of the liquidated position that is paid out. Each market can define its own liquidation penalty (e.g. 5% in the example below) but every market's liquidation penalty must be greater than the global minimum liquidation penalty. 
+The liquidation penalty is a fixed percentage defining the value of the liquidated position that is paid out. Each market can define its own liquidation penalty (e.g. 3% in the example below) but every market's liquidation penalty must be greater than the global minimum liquidation penalty. 
 $$
-penalty = 0.05
+penalty = 0.03
 $$
-### **Minimum Margin** 
-The minimum margin refers to the minimum amount of margin that a single contract must have at all times and is defined as:
-$$
-minMargin = P_{index} \cdot  penalty
-$$
-### **Initial Margin** 
-The initial minimum margin defines an additional component of the minimum margin requirement that every position in a given market must satisfy when first created. This requirement is stricter than the minimum margin requirement and exists in order to prevent unnecessary liquidation. 
+### **Initial Margin Requirement** 
 
-Each market can define its own initial margin (e.g. 0.5 in the example below) but every market's margin ratio must be greater than the global minimum margin ratio. 
+When a position is first created, the amount of collateral supplied as margin must satisfy the initial margin requirement. This margin requirement is stricter than the maintenance margin requirement and exists in order to reduce the risk of immediate liquidation. 
 $$
-initialMargin=penalty+initialMarginFactor=0.05
+initialMarginRatio=penalty+initialMarginRatioFactor
 $$
-Upon position creation, each long and short being matched must satisfy the following:
+Upon position creation, each long contract must satisfy the following margin requirement:
 $$
-\frac{margin_{long}}{quantity} \geq P_{contract}\cdot initialMargin
+\frac{margin_{long}}{quantity} \geq P_{contract}\cdot initialMarginRatio
 $$
+and each short contract must satisfy the following margin requirement:
 $$
-\frac{margin_{short}}{ quantity} \geq (2\cdot P_{index}-P_{contract})\cdot initialMargin
+\frac{margin_{short}}{ quantity} \geq (2\cdot P_{index}-P_{contract})\cdot initialMarginRatio
 $$
 
+{% hint style="info" %} 
 By doing so the net margin deposited is invariant with respect to the **Contract Price** (which is determined by by the p2p market) and only changes with respect to the **Index Price**, satisfying the following:
-
 $$
 \frac{margin_{long}+margin_{short}}{quantity} \geq 2\cdot P_{index}\cdot initialMargin
 $$
 
-### **NAV**
-Net asset value of an account, important to differentiate from NPV. Used mainly for liquidation or dispute calculation. Follows the following formula:
+{% endhint %}
 
+### **Maintenance Margin Requirement**
+
+The maintenance margin requirement refers to the minimum amount of margin that a position must maintain after being established. If this requirement is breached, the position is subject to liquidation. 
+
+Throughout the lifetime of a position, each long contract must satisfy the following margin requirement:
 $$
-NAV = \sum_{positions} (margin + quantity\cdot (NPV - minMargin))
+\frac{margin_{long}}{quantity} \geq P_{contract}\cdot penalty
 $$
-### **Liquidation Fee**  
-The fee that a liquidated position pays. The proceeds from liquidation fees are split between the liquidator and insurance fund.
+and each short contract must satisfy the following margin requirement:
 $$
-liquidationFee =penalty\cdot P_{index} \cdot quantity
+\frac{margin_{short}}{ quantity} \geq (2\cdot P_{index}-P_{contract})\cdot penalty
 $$
+
+{% hint style="info" %} 
+NOTE: At a given point in time, the $$margin_{long}$$ and $$margin_{short}$$ values reflect the net margin values of each position after all funding fees have been paid.
+
+{% endhint %}
 
 ### **Clawback** 
 A clawback event occurs when a threshold number of accounts cannot be liquidated with a net-zero final payout. In practice, this happens when a chain reaction of unidirectional liquidation cannot be liquidated with the position margin due to volatility or lack of liquidity. 
+
