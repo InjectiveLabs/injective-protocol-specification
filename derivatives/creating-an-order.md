@@ -1,5 +1,5 @@
 In the Injective Perpetuals Protocol, there are two main types of orders: maker orders and taker orders. **Make orders** are stored on Injective's decentralized orderbook on the Injective Chain while **Take orders** are immediately executed against make orders on the Injective Perpetuals Contract.
-# **Make Order Message Format**
+# **Order Message Format**
 
 The Injective Perpetuals Protocol leverages the [0x Order Message format](https://github.com/0xProject/0x-protocol-specification/blob/master/v3/v3-specification.md#order-message-format) for the external interface to represent a make order for a derivative position, i.e. a cryptographically signed message expressing an agreement to enter into a derivative position under specified parameters. 
 
@@ -22,9 +22,80 @@ A make order message consists of the following parameters:
 | makerFeeAssetData | bytes   | Empty. |
 | takerFeeAssetData | bytes   | Empty. |
 
-
 In a given perpetual market specified by `marketID`, an order encodes the willingness to purchase `quantity` contracts in a given direction (long or short) at a specified contract price $$P_{contract}$$ using a specified amount of `margin` of base currency as collateral. 
 
 
 
+# Order Validation 
 
+
+
+```
+/// @dev Fetches all order-relevant information needed to validate if the supplied order is fillable.
+/// @param order The order structure
+/// @param signature Signature provided by maker that proves the order's authenticity.
+/// @param indexPrice The index price to use as a reference. If 0, use the market's existing index price.
+/// @return The orderInfo (hash, status, and `takerAssetAmount` already filled for the given order),
+/// fillableTakerAssetAmount (amount of the order's `takerAssetAmount` that is fillable given all on-chain state),
+/// and isValidSignature (validity of the provided signature).
+function getOrderRelevantState(
+    LibOrder.Order memory order,
+    bytes memory signature,
+    uint256 indexPrice
+)
+    public
+    view
+    returns (
+        LibOrder.OrderInfo memory orderInfo,
+        uint256 fillableTakerAssetAmount,
+        bool isValidSignature
+    )
+{
+```
+
+
+
+
+```
+/// @dev Fetches all order-relevant information needed to validate if the supplied orders are fillable.
+/// @param orders Array of order structures
+/// @param signatures Array of signatures provided by makers that prove the authenticity of the orders.
+/// @return The ordersInfo (array of the hash, status, and `takerAssetAmount` already filled for each order),
+/// fillableTakerAssetAmounts (array of amounts for each order's `takerAssetAmount` that is fillable given all on-chain state),
+/// and isValidSignature (array containing the validity of each provided signature).
+/// NOTE: Expects each of the orders to be of the same marketID, otherwise may return incorrect information
+function getOrderRelevantStates(LibOrder.Order[] memory orders, bytes[] memory signatures)
+  public
+  view
+  returns (
+    LibOrder.OrderInfo[] memory ordersInfo,
+    uint256[] memory fillableTakerAssetAmounts,
+    bool[] memory isValidSignature
+	);
+```
+
+
+
+
+
+### OrderInfo
+
+```
+struct OrderInfo {
+    uint8 orderStatus;                    // Status that describes order's validity and fillability.
+    bytes32 orderHash;                    // EIP712 hash of the order (see LibOrder.getOrderHash).
+    uint256 orderTakerAssetFilledAmount;  // Amount of order that has already been filled.
+}
+```
+### Order Status
+```
+enum OrderStatus {
+    INVALID,
+    INVALID_MAKER_ASSET_AMOUNT,
+    INVALID_TAKER_ASSET_AMOUNT,
+    FILLABLE,
+    EXPIRED,
+    FULLY_FILLED,
+    CANCELLED
+}
+```

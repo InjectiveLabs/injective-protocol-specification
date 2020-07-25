@@ -1,13 +1,39 @@
-- **Filling an Order**
-    1. Taker discovers the make order from the Injective Chain and decides to fill some quantity of the order. This means that he wishes to enter into a position in the opposite direction of the make order at the Contract Price specified in the make order for some desired quantity of contracts using his desired amount of margin as collateral.
-    2. Taker calls  `fillOrder(order, quantity, margin, signature)` on the futures smart contract. This will immediately enter the workflow of establishing two positions - one for the maker and one for the taker. 
-    3. By doing so, the futures contract transfers `margin` amount of the base currency specified by the make order and take order using ERC-20 the `transferFrom` call and deposits the tokens into their balance. 
-    4. The positions are attempted to be created for both parties. If the following conditions succeed, then the positions are created. If any one of these checks fail the entire transaction is reverted.
+# Filling Orders
 
-        $$\frac{margin_{long}}{quantity} \geq P_{contract}\cdot initialMargin$$
+Orders can be filled by calling the following methods on the `InjectiveFutures` contract
 
-        $$\frac{margin_{short}}{ quantity} \geq (2\cdot P_{index}-P_{contract})\cdot initialMargin$$
+### fillOrder
 
-        - If any of the orders being used was filled before, the `quantity` being taken must not be greater than what is remaining.
+This is the most basic way to fill an order. All of the other methods call `fillOrder` under the hood with additional logic. This function will attempt to execute `quantity` contracts of the `order` specified by the caller. However, if the remaining fillable amount is less than the `quantity` specified, the remaining amount will be filled. Partial fills are allowed when filling orders.
 
-    Now, suppose a maker creates a huge make order and a taker decides to partial fill it. If it is the first time that the maker and taker are trading, by default, the entire maker's deposits are used as margin for this position, and the same is true for the taker. 
+```
+/// @dev Fills the input order.
+/// @param order The make order to be executed.
+/// @param quantity Desired quantity of contracts to execute.
+/// @param margin Desired amount of margin (denoted in baseCurrency) to use to fill the order.
+/// @param signature The signature of the order signed by maker.
+/// @return accountID The accountID of the newly created account, if there is one.
+function fillOrder(
+    LibOrder.Order memory order,
+    uint256 quantity,
+    uint256 margin,
+    bytes memory signature
+) public returns (bytes32) {
+```
+
+**Logic**
+
+Calling `fillOrder` will perform the following steps:
+
+1. Query the state and status of the order
+2. Revert if the order is unfillable (invalid context, expired, cancelled, fully filled, invalid signature)
+
+[Initial Margin Requirement](./keyterms.md#initial-margin-requirement)
+
+
+
+This will immediately enter the workflow of establishing two positions - one for the maker and one for the taker. 
+
+2. By doing so, the futures contract transfers `margin` amount of the base currency specified by the make order and take order using ERC-20 the `transferFrom` call and deposits the tokens into their balance. 
+
+3. The positions are attempted to be created for both parties. If the following conditions succeed, then the positions are created. If any one of these checks fail the entire transaction is reverted.
