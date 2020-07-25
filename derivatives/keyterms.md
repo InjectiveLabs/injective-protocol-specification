@@ -20,7 +20,6 @@ $$
 P_{index}=\mathrm{index\ price\ of\ underlying}
 $$
 ### **Contract Price **
-
 The value of the futures contract the position entered/created. This is purely market driven and is set by individuals, independent of the oracle price.
 $$
 P_{contract}=\mathrm{contract\ price}
