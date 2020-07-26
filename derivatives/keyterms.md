@@ -74,22 +74,10 @@ When a position is first created, the amount of collateral supplied as margin mu
 $$
 initialMarginRatio=penalty+initialMarginRatioFactor
 $$
-Upon position creation, each long contract must satisfy the following margin requirement:
+Upon position creation, each contract must satisfy the following margin requirement:
 $$
-\frac{margin_{long}}{quantity} \geq P_{contract}\cdot initialMarginRatio
+\frac{margin}{quantity} \geq \max (P_{contract} \cdot margin, P_{index} \cdot initialMarginRatio - NPV)
 $$
-and each short contract must satisfy the following margin requirement:
-$$
-\frac{margin_{short}}{ quantity} \geq (2\cdot P_{index}-P_{contract})\cdot initialMarginRatio
-$$
-
-{% hint style="info" %} 
-By doing so the net margin deposited is invariant with respect to the **Contract Price** (which is determined by by the p2p market) and only changes with respect to the **Index Price**, satisfying the following:
-$$
-\frac{margin_{long}+margin_{short}}{quantity} \geq 2\cdot P_{index}\cdot initialMarginRatio
-$$
-
-{% endhint %}
 
 ### **Maintenance Margin Requirement**
 
