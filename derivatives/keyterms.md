@@ -74,38 +74,22 @@ When a position is first created, the amount of collateral supplied as margin mu
 $$
 initialMarginRatio=penalty+initialMarginRatioFactor
 $$
-Upon position creation, each long contract must satisfy the following margin requirement:
+Upon position creation, each contract must satisfy the following margin requirement:
 $$
-\frac{margin_{long}}{quantity} \geq P_{contract}\cdot initialMarginRatio
+\frac{margin}{quantity} \geq \max (P_{contract} \cdot initialMarginRatio, P_{index} \cdot initialMarginRatio - NPV)
 $$
-and each short contract must satisfy the following margin requirement:
-$$
-\frac{margin_{short}}{ quantity} \geq (2\cdot P_{index}-P_{contract})\cdot initialMarginRatio
-$$
-
-{% hint style="info" %} 
-By doing so the net margin deposited is invariant with respect to the **Contract Price** (which is determined by by the p2p market) and only changes with respect to the **Index Price**, satisfying the following:
-$$
-\frac{margin_{long}+margin_{short}}{quantity} \geq 2\cdot P_{index}\cdot initialMarginRatio
-$$
-
-{% endhint %}
 
 ### **Maintenance Margin Requirement**
 
 The maintenance margin requirement refers to the minimum amount of margin that a position must maintain after being established. If this requirement is breached, the position is subject to liquidation. 
 
-Throughout the lifetime of a position, each long contract must satisfy the following margin requirement:
+Throughout the lifetime of a position, each contract must satisfy the following margin requirement:
 $$
-\frac{margin_{long}}{quantity} \geq P_{contract}\cdot penalty
-$$
-and each short contract must satisfy the following margin requirement:
-$$
-\frac{margin_{short}}{ quantity} \geq (2\cdot P_{index}-P_{contract})\cdot penalty
+\frac{margin}{quantity} \geq P_{index} \cdot penalty- NPV
 $$
 
 {% hint style="info" %} 
-NOTE: At a given point in time, the $$margin_{long}$$ and $$margin_{short}$$ values reflect the net margin values of each position after all funding fees have been paid.
+NOTE: At a given point in time, the $$margin$$ value reflects the net margin values of each position after all funding fees have been paid.
 
 {% endhint %}
 
