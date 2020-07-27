@@ -21,11 +21,9 @@ The funding rate is a critical piece to ensure convergence of market prices to t
 
 The exact formula are:
 
-```
-Premium = (max(0, Impact Bid Price — Index Price) — max(0, Index Price — Impact Ask Price)) / Index Price
+`Premium = (max(0, Impact Bid Price — Index Price) — max(0, Index Price — Impact Ask Price)) / Index Price`
 
-Funding Rate = Premium + clamp(Interest Rate — Premium, 0.05%, -0.05%)
-```
+`Funding Rate = Premium + clamp(Interest Rate — Premium, 0.05%, -0.05%)`
 
 The impact prices are weighted averages over the first 3000 long or respective short orders.
 
