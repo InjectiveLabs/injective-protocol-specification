@@ -89,7 +89,7 @@ $$
 $$
 
 {% hint style="info" %} 
-NOTE: At a given point in time, the $$margin_{long}$$ and $$margin_{short}$$ values reflect the net margin values of each position after all funding fees have been paid.
+NOTE: At a given point in time, the $$margin$$ value reflects the net margin values of each position after all funding fees have been paid.
 
 {% endhint %}
 
