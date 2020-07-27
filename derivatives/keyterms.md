@@ -76,7 +76,7 @@ initialMarginRatio=penalty+initialMarginRatioFactor
 $$
 Upon position creation, each contract must satisfy the following margin requirement:
 $$
-\frac{margin}{quantity} \geq \max (P_{contract} \cdot margin, P_{index} \cdot initialMarginRatio - NPV)
+\frac{margin}{quantity} \geq \max (P_{contract} \cdot initialMarginRatio, P_{index} \cdot initialMarginRatio - NPV)
 $$
 
 ### **Maintenance Margin Requirement**
