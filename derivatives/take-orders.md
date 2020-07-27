@@ -6,7 +6,7 @@ Orders can be filled by calling the following methods on the `InjectiveFutures` 
 
 This is the most basic way to fill an order. All of the other methods call `fillOrder` under the hood with additional logic. This function will attempt to execute `quantity` contracts of the `order` specified by the caller. However, if the remaining fillable amount is less than the `quantity` specified, the remaining amount will be filled. Partial fills are allowed when filling orders.
 
-```
+```javascript
 /// @dev Fills the input order.
 /// @param order The make order to be executed.
 /// @param quantity Desired quantity of contracts to execute.
