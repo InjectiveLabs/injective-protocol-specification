@@ -11,7 +11,7 @@
 * [Interface](overview/interface.md)
 * [Governance](overview/governance.md)
 * [Token Economics](overview/token-economics.md)
-* [Miscellaneous](overview/miscellaneous.md)
+<!-- * [Miscellaneous](overview/miscellaneous.md) -->
 * [Getting Started](overview/validators.md)
 
 ## Derivatives
