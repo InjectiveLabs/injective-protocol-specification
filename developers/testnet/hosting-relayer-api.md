@@ -214,7 +214,7 @@ Reading Relayer API logs:
 $ docker service logs -f relayer_relayer-api
 ```
 
-## 5. Expose Relayer API to HTTP\(S\) clients
+## 5. Expose Relayer API
 
 If you are running the server using a stack config above, then API server exposes ports `8084` and `8085` for HTTP API and WS API accordingly. You might expose those using a reverse proxy such as Nginx or [Caddy](http://caddyserver.com). We use the following config for Caddy v2:
 
