@@ -1,36 +1,37 @@
-In the Injective Perpetuals Protocol, there are two main types of orders: maker orders and taker orders. **Make orders** are stored on Injective's decentralized orderbook on the Injective Chain while **Take orders** are immediately executed against make orders on the Injective Perpetuals Contract.
-# **Order Message Format**
+# Make Orders
 
-The Injective Perpetuals Protocol leverages the [0x Order Message format](https://github.com/0xProject/0x-protocol-specification/blob/master/v3/v3-specification.md#order-message-format) for the external interface to represent a make order for a derivative position, i.e. a cryptographically signed message expressing an agreement to enter into a derivative position under specified parameters. 
+In the Injective Perpetuals Protocol, there are two main types of orders: maker orders and taker orders. **Make orders** are stored on Injective's decentralized orderbook on the Injective Chain while **Take orders** are immediately executed against make orders on the Injective Perpetuals Contract.
+
+## **Order Message Format**
+
+The Injective Perpetuals Protocol leverages the [0x Order Message format](https://github.com/0xProject/0x-protocol-specification/blob/master/v3/v3-specification.md#order-message-format) for the external interface to represent a make order for a derivative position, i.e. a cryptographically signed message expressing an agreement to enter into a derivative position under specified parameters.
 
 A make order message consists of the following parameters:
 
-| Parameter                           | Type    | Description                                                  |
-| ----------------------------------- | ------- | ------------------------------------------------------------ |
-| makerAddress                        | address | Address that created the order.                              |
-| takerAddress                        | address | Empty. |
-| feeRecipientAddress                 | address | Address of the recipient of the order transaction fee.        |
-| senderAddress     | address | Empty. |
-| makerAssetAmount                    | uint256 | The contract price ($$P_{contract}$$), i.e. the price of 1 contract denominated in base currency. |
-| takerAssetAmount                    | uint256 | The $$quantity$$ of contracts the maker seeks to obtain. |
-| makerFee                            | uint256 | The amount of $$margin$$ denoted in base currency the maker would like to post/risk for the order. |
-| takerFee                            | uint256 | Empty. |
-| expirationTimeSeconds               | uint256 | Timestamp in seconds at which order expires.                 |
-| salt                       | uint256 | Arbitrary number to facilitate uniqueness of the order's hash. |
-| makerAssetData        | bytes   | The first 32 bytes contain the `marketID` of the market for the position if the order is LONG, empty otherwise.  Right padded with 0's to be 36 bytes |
-| takerAssetData        | bytes   | The first 32 bytes contain the `marketID` of the market for the position if the order is LONG, empty otherwise.  Right padded with 0's to be 36 bytes |
-| makerFeeAssetData | bytes   | Empty. |
-| takerFeeAssetData | bytes   | Empty. |
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| makerAddress | address | Address that created the order. |
+| takerAddress | address | Empty. |
+| feeRecipientAddress | address | Address of the recipient of the order transaction fee. |
+| senderAddress | address | Empty. |
+| makerAssetAmount | uint256 | The contract price \($$P_{contract}$$\), i.e. the price of 1 contract denominated in base currency. |
+| takerAssetAmount | uint256 | The $$quantity$$ of contracts the maker seeks to obtain. |
+| makerFee | uint256 | The amount of $$margin$$ denoted in base currency the maker would like to post/risk for the order. |
+| takerFee | uint256 | Empty. |
+| expirationTimeSeconds | uint256 | Timestamp in seconds at which order expires. |
+| salt | uint256 | Arbitrary number to facilitate uniqueness of the order's hash. |
+| makerAssetData | bytes | The first 32 bytes contain the `marketID` of the market for the position if the order is LONG, empty otherwise.  Right padded with 0's to be 36 bytes |
+| takerAssetData | bytes | The first 32 bytes contain the `marketID` of the market for the position if the order is LONG, empty otherwise.  Right padded with 0's to be 36 bytes |
+| makerFeeAssetData | bytes | Empty. |
+| takerFeeAssetData | bytes | Empty. |
 
-In a given perpetual market specified by `marketID`, an order encodes the willingness to purchase `quantity` contracts in a given direction (long or short) at a specified contract price $$P_{contract}$$ using a specified amount of `margin` of base currency as collateral. 
+In a given perpetual market specified by `marketID`, an order encodes the willingness to purchase `quantity` contracts in a given direction \(long or short\) at a specified contract price $$P_{contract}$$ using a specified amount of `margin` of base currency as collateral.
 
-
-
-# Order Validation 
+## Order Validation
 
 ### getOrderRelevantState
 
-```js
+```javascript
 /// @dev Fetches all order-relevant information needed to validate if the supplied order is fillable.
 /// @param order The order structure
 /// @param signature Signature provided by maker that proves the order's authenticity.
@@ -53,12 +54,9 @@ function getOrderRelevantState(
 {
 ```
 
-
-
 ### getOrderRelevantStates
 
-
-```js
+```javascript
 /// @dev Fetches all order-relevant information needed to validate if the supplied orders are fillable.
 /// @param orders Array of order structures
 /// @param signatures Array of signatures provided by makers that prove the authenticity of the orders.
@@ -73,8 +71,9 @@ function getOrderRelevantStates(LibOrder.Order[] memory orders, bytes[] memory s
     LibOrder.OrderInfo[] memory ordersInfo,
     uint256[] memory fillableTakerAssetAmounts,
     bool[] memory isValidSignature
-	);
+    );
 ```
+
 ### getMakerOrderRelevantStates
 
 ```javascript
@@ -102,19 +101,19 @@ function getMakerOrderRelevantStates(
     )
 ```
 
-
-
 ### OrderInfo
 
-```js
+```javascript
 struct OrderInfo {
     uint8 orderStatus;                    // Status that describes order's validity and fillability.
     bytes32 orderHash;                    // EIP712 hash of the order (see LibOrder.getOrderHash).
     uint256 orderTakerAssetFilledAmount;  // Amount of order that has already been filled.
 }
 ```
+
 ### Order Status
-```js
+
+```javascript
 enum OrderStatus {
     INVALID,
     INVALID_MAKER_ASSET_AMOUNT,
@@ -125,3 +124,4 @@ enum OrderStatus {
     CANCELLED
 }
 ```
+

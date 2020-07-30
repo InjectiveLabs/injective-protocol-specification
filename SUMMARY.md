@@ -11,10 +11,10 @@
 * [Interface](overview/interface.md)
 * [Governance](overview/governance.md)
 * [Token Economics](overview/token-economics.md)
-<!-- * [Miscellaneous](overview/miscellaneous.md) -->
 * [Getting Started](overview/validators.md)
 
 ## Derivatives
+
 * [Overview](derivatives/overview.md)
 * [Key Terms](derivatives/keyterms.md)
 * [Getting Started](derivatives/getting-started.md)
@@ -30,5 +30,8 @@
 
 ## Developers
 
-* [Sending Testnet Transactions](developers/testnet.md)
+* [Testnet](developers/testnet/README.md)
+  * [Relayer API Examples](developers/testnet/relayer-api-examples.md)
+  * [Joining the Testnet](developers/testnet/testnet-join.md)
+  * [Hosting Relayer API](developers/testnet/hosting-relayer-api.md)
 
