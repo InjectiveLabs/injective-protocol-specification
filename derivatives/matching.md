@@ -1,8 +1,11 @@
 # Matching Orders
+
 Two orders of opposing directions can directly be matched if they have a negative spread.
 
-### matchOrders
+## matchOrders
+
 This is the most basic way to match two orders.
+
 ```javascript
 /// @dev Matches the input orders.
 /// @param leftOrder The order to be settled.
@@ -16,13 +19,15 @@ function matchOrders(
   bytes memory rightSignature
 ) external;
 ```
+
 **Logic**
 
 Calling `matchOrders` will perform the following steps:
 
+## multiMatchOrders
 
-### multiMatchOrders
 `multiMatchOrders` can be used to
+
 ```javascript
 /// @dev Matches the input orders and only creates one position for the `rightOrder` maker.
 /// @param leftOrders The orders to be settled.
@@ -36,13 +41,15 @@ function multiMatchOrders(
   bytes memory rightSignature
 ) external;
 ```
+
 **Logic**
 
 Calling `multiMatchOrders` will perform the following steps:
 
+## batchMatchOrders
 
-### batchMatchOrders
 `batchMatchOrders` can be used to
+
 ```javascript
 /// @dev Matches the input orders.
 /// @param leftOrders The orders to be settled.
@@ -56,6 +63,8 @@ function batchMatchOrders(
   bytes[] memory rightSignatures
 ) external;
 ```
+
 **Logic**
 
 Calling `batchMatchOrders` will perform the following steps:
+

@@ -62,20 +62,19 @@ Calling `getOrderRelevantState` will perform the following steps:
 2. Set the quantity of contracts of the `order` that have been filled in `orderInfo.orderTakerAssetFilledAmount`
 3. Set the order status of the order in `orderInfo.orderStatus` according to the following conditions:
    1. If the order has been cancelled, the `orderStatus` will be `CANCELLED`.
-   2. If the order has been fully filled (i.e. `orderInfo.orderTakerAssetFilledAmount` equals `order.takerAssetAmount`, the `orderStatus` will be `FULLY_FILLED`.
+   2. If the order has been fully filled \(i.e. `orderInfo.orderTakerAssetFilledAmount` equals `order.takerAssetAmount`, the `orderStatus` will be `FULLY_FILLED`.
    3. If the order has expired, the `orderStatus` will be `EXPIRED`.
-   4. If the order's margin (`order.makerFee`) does not satisfy the [initial margin requirement](./keyterms.md#initial-margin-requirement), the `orderStatus` will be `INVALID_MAKER_ASSET_AMOUNT`. Note: the index price used in this calculation is the inputted `indexPrice`.
-   5. Otherwise if the order is fillable, the `orderStatus` will be `FILLABLE` and the `fillableTakerAssetAmount` to equal the quantity of contracts that remain fillable (i.e. `order.takerAssetAmount - orderInfo.orderTakerAssetFilledAmount`).
+   4. If the order's margin \(`order.makerFee`\) does not satisfy the [initial margin requirement](keyterms.md#initial-margin-requirement), the `orderStatus` will be `INVALID_MAKER_ASSET_AMOUNT`. Note: the index price used in this calculation is the inputted `indexPrice`.
+   5. Otherwise if the order is fillable, the `orderStatus` will be `FILLABLE` and the `fillableTakerAssetAmount` to equal the quantity of contracts that remain fillable \(i.e. `order.takerAssetAmount - orderInfo.orderTakerAssetFilledAmount`\).
 4. Check whether or not the signature is valid and set `isValidSignature` to true if valid. Otherwise, set to false and set the `orderStatus` to `INVALID`.
-5. If the `orderStatus` from the previous steps is `FILLABLE`, check that the order maker has sufficient balance of baseCurrency in his freeDeposits (his `availableMargin`) to fill `fillableTakerAssetAmount` contracts of the order.
+5. If the `orderStatus` from the previous steps is `FILLABLE`, check that the order maker has sufficient balance of baseCurrency in his freeDeposits \(his `availableMargin`\) to fill `fillableTakerAssetAmount` contracts of the order.
    * If the maker does not have at least `order.makerFee * fillableTakerAssetAmount / order.takerAssetAmount + fillableTakerAssetAmount * order.makerAssetAmount * makerTxFee` amount of balance to the fill the order, `fillableTakerAssetAmount` is set to the maximum quantity of contracts fillable which equals `availableMargin * order.TakerAssetAmount / order.MakerFee + order.TakerAssetAmount * makerTxFee`. If this value is zero, the `orderStatus` will be `INVALID_TAKER_ASSET_AMOUNT`.
 
 ### getOrderRelevantStates
 
 Sequentially calls `getOrderRelevantState`.
 
-
-```js
+```javascript
 /// @dev Fetches all order-relevant information needed to validate if the supplied orders are fillable.
 /// @param orders Array of order structures
 /// @param signatures Array of signatures provided by makers that prove the authenticity of the orders.
@@ -145,3 +144,4 @@ enum OrderStatus {
     CANCELLED
 }
 ```
+
