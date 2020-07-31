@@ -1,8 +1,8 @@
 # Matching Orders
-Two orders of opposing directions can directly be matched if they have a negative spread. 
+Two orders of opposing directions can directly be matched if they have a negative spread.
 
 ### matchOrders
-This is the most basic way to match two orders. 
+This is the most basic way to match two orders.
 ```javascript
 /// @dev Matches the input orders.
 /// @param leftOrder The order to be settled.
@@ -59,4 +59,3 @@ function batchMatchOrders(
 **Logic**
 
 Calling `batchMatchOrders` will perform the following steps:
-

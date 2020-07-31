@@ -1,8 +1,10 @@
-Before you can start trading, you must first own the base currency (USDT) used as margin to trade in the derivative market. 
+# Getting Started
 
-Afterwards, you should find an active derivative market that you would like to participate in.  
+Before you can start trading, you must first own the base currency \(USDT\) used as margin to trade in the derivative market.
 
-Then, set the ERC-20 approval of the base currency token set to the futures contract address. 
+Afterwards, you should find an active derivative market that you would like to participate in.
 
-TODO: add pictures and walkthroughs for this process. 
+Then, set the ERC-20 approval of the base currency token set to the futures contract address.
+
+TODO: add pictures and walkthroughs for this process.
 

@@ -5,7 +5,6 @@
 The oracle serves two functions:
 
 1. Update the index price of an asset
-
 2. Set the new funding rate
 
 ### 1. Update the index price
@@ -33,13 +32,14 @@ For the testnet we are setting up a centralized oracle service. In later version
 
 ### Testnet config
 
-- Pair = XAU/USDT
-- Gold Interest Rate = 0.03%
-- USD Interest Rate = 0.06%
-- Funding Interval = 8 hours
+* Pair = XAU/USDT
+* Gold Interest Rate = 0.03%
+* USD Interest Rate = 0.06%
+* Funding Interval = 8 hours
 
 ### Oracle service
 
-The oracle service updates the ticker prices every 5 minutes. If any asynchronous requests fail, we deploy an [exponential backoff](https://cloud.google.com/iot/docs/how-tos/exponential-backoff) strategy. Prices are taken from https://metals-api.com/.
+The oracle service updates the ticker prices every 5 minutes. If any asynchronous requests fail, we deploy an [exponential backoff](https://cloud.google.com/iot/docs/how-tos/exponential-backoff) strategy. Prices are taken from [https://metals-api.com/](https://metals-api.com/).
 
 Three times per day the funding rate is calculated according to the formula from above.
+
