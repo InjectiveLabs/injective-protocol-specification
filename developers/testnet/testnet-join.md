@@ -189,7 +189,7 @@ $ chmod +x relayerd-testnet.sh
 Run the script to start syncing the node with the rest of Testnet. You should not close terminal, as this script is not daemonized — if you replace `-it --rm` with `-d` in the command to run a detached container. There is a lot of ways to daemonize this alternatively — using `systemd`, `docker-compose` or even `docker stack`. Daemonization of the relayerd process is out of scope of this tutorial.
 
 ```text
-$ ./relayer-testnet.sh
+$ ./relayerd-testnet.sh
 
 ...
 I[2020-07-29|18:32:07.878] No 'from' account provided, loopback client will be in read-only mode module=main
