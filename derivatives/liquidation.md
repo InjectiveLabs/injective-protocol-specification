@@ -10,68 +10,28 @@
 
   Each `Market` records a given `initialMarginRatio`, `liquidationPenalty`, `indexPrice`, `currFundingTimestamp`, `fundingInterval`, `cumulativeFunding`, `makerTxFee`, `takerTxFee`, and a `relayerFeePercentage`.
 
-  * Market and Position Struct Definitions
-
-    ```text
-      struct Market {
-          bytes32 marketID;
-          string ticker;
-          address oracle;
-          uint256 initialMarginRatio;        // /1000
-          uint256 liquidationPenalty; // /1000
-          uint256 indexPrice;
-          uint256 currFundingTimestamp; // the current funding timestamp
-          uint256 fundingInterval; // defines the interval in seconds by which the currFundingTimestamp increments
-          int256 cumulativeFunding;   //Stored based on one contract. /10^6
-          PermyriadMath.Permyriad makerTxFee;   // transaction maker fee
-          PermyriadMath.Permyriad takerTxFee;   // transaction taker fee
-          PermyriadMath.Permyriad relayerFeePercentage;   // transaction relayer fee percentage
-      }
-    ```
-
-    ```text
-      struct Position {
-          // owner of the position
-          bytes32 accountID;
-          // marketID of the position
-          bytes32 marketID;
-          // direction of the position
-          Direction direction;
-          // quantity of the position
-          uint256 quantity;
-          // contractPrice of the position
-          uint256 contractPrice;
-          // Net present value of the position
-          int256 NPV;
-          uint256 minMargin;
-          uint256 margin; // used to be amount provided
-          int256 cumulativeFundingEntry; // Just for perpetuals. The epoch of fundingRate this position entered in.
-      }
-    ```
 
     When an account's $NAV$ goes under 0, the account is subject to liquidation.
-
+    
     $NAV = \sum\limits\_{positions} \(margin + quantity\cdot \(NPV - minMargin\)\)$
-
+    
     For simplicity we consider the case when the account only holds 1 position. If the following liquidation condition is true, the account can be liquidated:
-
+    
     $$\frac{margin}{quantity} \leq P_{index}\cdot penalty - NPV$$
-
+    
     Hence for a perpetual long, this simplifies to:
-
+    
     $\frac{margin}{quantity} \leq P_{index}\cdot penalty - P_{index}+P_{contract} + F_{entry}$
-
+    
     $\frac{margin}{quantity} \leq \(-1+penalty\)\cdot P_{index}+P_{contract} + F\_{entry}$
-
+    
     For a perpetual short, this is:
-
+    
     $\frac{margin}{quantity} \leq P_{index}\cdot penalty - P_{contract}+P_{index}-F_{entry}$
-
+    
     $\frac{margin}{quantity} \leq \(1+ penalty\)\cdot P_{index} - P_{contract}-F\_{entry}$
 
   * **Position Liquidation Price**
-
-    **Position Liquidation Price**
 
     Each position has a liquidation price and a bankruptcy price. When the index price reaches a position's liquidation price, the position can be liquidated. When the index price reaches a position's bankruptcy price, the position can be vaporized.
 
@@ -106,7 +66,7 @@
     Must pass in one or more `orders` to
 
     ```jsx
-    /// @dev Closes the input position.
+/// @dev Closes the input position.
     /// @param positionID The ID of the position to liquidate.
     /// @param quantity The quantity of contracts of the position to liquidate.
     /// @param orders The orders to use to liquidate the position.
