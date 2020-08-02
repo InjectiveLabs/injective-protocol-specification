@@ -87,7 +87,6 @@ services:
       restart_policy:
         condition: on-failure
     environment:
-      - APP_ENV=dev
       - ETHEREUM_RPC_WS=wss://evm-eu.injective.dev/ws
       - ETHEREUM_RPC_HTTP=https://evm-eu.injective.dev
       - ZEROEX_DEVUTILS_ADDR=0xDf12200825b1D37F92a6A959813cd2B2bfA2c488
