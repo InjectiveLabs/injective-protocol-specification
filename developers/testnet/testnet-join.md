@@ -118,7 +118,7 @@ You must also set the list of persistent peers so your node can sync the state f
 
 ```bash
 # Comma separated list of nodes to keep persistent connections to
-persistent_peers = "e58854fcaf218ae0f667bf5750eef467d357d13f@testnet-rpc.injective.dev:26656,07d0159602fca092c4702f514e994879ab78064e@testnet-rpc-us.injective.dev:26656,3816d76550646ca74d57b2ed16ff1acc2b7925f0@testnet-rpc-ap.injective.dev:26656"
+persistent_peers = "ff48adee4733a3edf9d449fce76cddf919569920@testnet-rpc.injective.dev:26656,07d0159602fca092c4702f514e994879ab78064e@testnet-rpc-us.injective.dev:26656,3816d76550646ca74d57b2ed16ff1acc2b7925f0@testnet-rpc-ap.injective.dev:26656"
 ```
 
 Optionally enable Prometheus metrics for the node.
@@ -159,8 +159,8 @@ docker run -it --rm \
 	--chain-id=testnet \
 	--eth-coordinator="0x3b46eF40b11888b7353C764Fca86A83fF89dC90C" \
 	--eth-futures="0x8f399baf9009a1466d9a3d8372703427c9f0c8cc" \
-	--zeroex-devutils="0x2C09F049f620bF04390E146b6CD7534311614a29" \
-	--zeroex-exchange="0xe525672f353e1b155f4495010D7814c5dd64a3C6" \
+  --zeroex-devutils="0xDf12200825b1D37F92a6A959813cd2B2bfA2c488" \
+  --zeroex-exchange="0xe525672f353e1b155f4495010D7814c5dd64a3C6" \
 	--eth-node-ws="wss://evm-eu.injective.dev/ws" \
 	--eth-node-http="https://evm-eu.injective.dev" \
 	--log_level="*:info" \

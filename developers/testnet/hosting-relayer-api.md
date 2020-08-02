@@ -88,8 +88,8 @@ services:
         condition: on-failure
     environment:
       - APP_ENV=dev
-      - ETHEREUM_RPC_WS=wss://evm-us.injective.dev/ws
-      - ETHEREUM_RPC_HTTP=https://evm-us.injective.dev
+      - ETHEREUM_RPC_WS=wss://evm-eu.injective.dev/ws
+      - ETHEREUM_RPC_HTTP=https://evm-eu.injective.dev
       - ZEROEX_DEVUTILS_ADDR=0xDf12200825b1D37F92a6A959813cd2B2bfA2c488
       - ZEROEX_EXCHANGE_ADDR=0xe525672f353e1b155f4495010D7814c5dd64a3C6
       - INJECTIVE_FUTURES_ADDR=0x8f399baf9009a1466d9a3d8372703427c9f0c8cc
