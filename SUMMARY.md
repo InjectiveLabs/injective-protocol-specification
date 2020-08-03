@@ -16,8 +16,8 @@
 ## Derivatives
 
 * [Overview](derivatives/README.md)
-  * [Key Terms](derivatives/keyterms/README.md)
-    * [Leverage](derivatives/keyterms/leverage.md)
+  * [Key Terms](derivatives/keyterms.md)
+    * [Leverage](derivatives/leverage.md)
   * [Getting Started](derivatives/getting-started.md)
   * [Make Orders](derivatives/creating-an-order.md)
   * [Take Orders](derivatives/take-orders.md)
