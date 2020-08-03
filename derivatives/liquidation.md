@@ -36,10 +36,10 @@ Calling `liquidatePositionWithOrders` will perform the following steps:
       * To liquidate a short position, `lResults.liquidationPrice` must be less than or equal to the index price. 
 
 5. Close the `lResults.quantity` quantity contracts of the existing position. 
-   1. Calculate the PNL per contract (`contractPNL`) which equals `lResults.liquidationPrice - position.contractPrice` for longs and ` position.contractPrice - averageClosingPrice ` for shorts.
-   2. 
-   3. Transfer half of the `lResults.loss` to the free deposits of the liquidator of the `position` and the other half to the insurance pool. 
-      * `lResults.loss = position.margin - lResults.quantity * (position.margin / position.quantity + contractPNL) ` 
-
-
+   1. Calculate the trader's loss (`position.margin / position.quantity * quantity`) and update the state of the trader's position. 
+   2. Calculate the PNL per contract (`contractPNL`) which equals `lResults.liquidationPrice - position.contractPrice` for longs and ` position.contractPrice - averageClosingPrice ` for shorts.
+   3. Calculate the total payout from the position`cResults.payout = cResults.quantity * (position.margin / position.quantity + contractPNL) `
+      1. Allocate half of the payout to the liquidator and half to the insurance fund
+   4. Decrement the position's remaining margin by `position.margin / position.quantity * (position.quantity - quantity)`
+   5. Emit a `FuturesLiquidation` event. 
 
