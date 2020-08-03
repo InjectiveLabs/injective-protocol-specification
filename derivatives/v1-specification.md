@@ -78,27 +78,17 @@ Long or Short.
 
 ## **Index Price**
 
-The reference spot index price of the underlying asset that the derivative contract derives from. This value is obtained from an oracle.
-<img src="https://render.githubusercontent.com/render/math?math=P_%7Bindex%7D%3D%5Cmathrm%7Bindex%5C%20price%5C%20of%5C%20underlying%7D">
-<!-- $$
-P_{index}=\mathrm{index\ price\ of\ underlying}
-$$ -->
+The reference spot index price \(`indexPrice`\) of the underlying asset that the derivative contract derives from. This value is obtained from an oracle.
+
 
 ## **Contract Price**
 
-The value of the futures contract the position entered/created. This is purely market driven and is set by individuals, independent of the oracle price.
+The value of the futures contract the position entered/created \(`contractPrice`\). This is purely market driven and is set by individuals, independent of the oracle price.
 
-$$
-P_{contract}=\mathrm{contract\ price}
-$$
 
 ## **Quantity**
 
-The quantity of contracts. Must be a whole number.
-
-$$
-quantity = \mathrm{quantity\ of\ contracts}
-$$
+The quantity of contracts (`quantity`). Must be a whole number.
 
 ## **Position**
 
@@ -128,29 +118,15 @@ The funding rate value determines the funding fee that positions pay and is base
 
 ## **Funding Fee**
 
-The funding fee $$f$$ refers to the funding payment that is made for a **single contract** in the market for a given epoch $$i$$.
+The funding fee `f_i` refers to the funding payment that is made for a **single contract** in the market for a given epoch `i`. When a position is created, the position records the current epoch which is noted as the `entry` epoch. 
 
-$$
-f_{i} = \mathrm{unit\ funding\ fee\ at\ epoch\ }i
-$$
-
-Cumulative funding $$F$$ refers to the cumulative funding for the contract since position entry.
-
-$$
-F_{entry}= \sum \limits_{i=entry}^{current-1} f_i
-$$
+Cumulative funding `F` refers to the cumulative funding for the contract since position entry. `F_entry  = f_entry + ... + f_current`
 
 ## **NPV**
 
 Net Present Value of a single contract. For long and short perpetual contracts, the NPV calculation is:
-
-$$
-NPV_{perpetual\ long}= P_{index}-P_{contract} - F_{entry}
-$$
-
-$$
-NPV_{perpetual\ short} = P_{contract}-P_{index}+F_{entry}
-$$
+- `NPV_long = indexPrice - contractPrice - F_entry`
+- `NPV_short = - NPV_long = contractPrice - indexPrice + F_entry`
 
 ## **Liquidation**
 
@@ -158,25 +134,17 @@ When an account's **NAV** becomes negative, all of its positions are subject to 
 
 ## **Liquidation Penalty**
 
-The liquidation penalty is a fixed percentage defining the value of the liquidated position that is paid out. Each market can define its own liquidation penalty \(e.g. 3% in the example below\) but every market's liquidation penalty must be greater than the global minimum liquidation penalty.
-
-$$
-penalty = 0.03
-$$
+The liquidation penalty (`liquidationPenalty`) is a fixed percentage defining the value of the liquidated position that is paid out. Each market can define its own liquidation penalty \(e.g. 3%\) but every market's liquidation penalty must be greater than the global minimum liquidation penalty.
 
 ## **Initial Margin Requirement**
 
 When a position is first created, the amount of collateral supplied as margin must satisfy the initial margin requirement. This margin requirement is stricter than the maintenance margin requirement and exists in order to reduce the risk of immediate liquidation.
 
-$$
-initialMarginRatio=penalty+initialMarginRatioFactor
-$$
+`initialMarginRatio=penalty+initialMarginRatioFactor`
 
 Upon position creation, each contract must satisfy the following margin requirement:
 
-$$
-\frac{margin}{quantity} \geq \max (P_{contract} \cdot initialMarginRatio, P_{index} \cdot initialMarginRatio - NPV)
-$$
+`margin / quantity >= max(contractPrice * initialMarginRatio, indexPrice * initialMarginRatio - NPV`
 
 ## **Maintenance Margin Requirement**
 
@@ -184,9 +152,7 @@ The maintenance margin requirement refers to the minimum amount of margin that a
 
 Throughout the lifetime of a position, each contract must satisfy the following margin requirement:
 
-$$
-\frac{margin}{quantity} \geq P_{index} \cdot penalty- NPV
-$$
+`margin / quantity >= indexPrice * liquidationPenalty - NPV`
 
 ## **Clawback**
 
@@ -196,18 +162,13 @@ A clawback event occurs when a threshold number of accounts cannot be liquidated
 
 Although leverage is not explicitly defined in our protocol, the amount of margin a trader uses to collateralize a position is a function of leverage according to the following formula:
 
-$$
-margin = quantity \cdot \max (\frac{P_{contract}}{leverage},\frac{ P_{index} }{leverage} - NPV)
-$$
+`margin = quantity * max(contractPrice / leverage, indexPrice / leverage - NPV)`
+
 
 For new positions, the funding fee component of the NPV formula can removed since the position has not been created yet, resulting in the following NPV calculations:
-$$
-NPV_{perpetual\ long}= P_{index}-P_{contract}
-$$
 
-$$
-NPV_{perpetual\ short} = P_{contract}-P_{index}
-$$
+- `NPV_long = indexPrice - contractPrice` 
+- `NPV_short = contractPrice - indexPrice`
 
 # Make Orders
 
@@ -225,7 +186,7 @@ A make order message consists of the following parameters:
 | takerAddress | address | Empty. |
 | feeRecipientAddress | address | Address of the recipient of the order transaction fee. |
 | senderAddress | address | Empty. |
-| makerAssetAmount | uint256 | The contract price \($$P_{contract}$$\), i.e. the price of 1 contract denominated in base currency. |
+| makerAssetAmount | uint256 | The contract price \(`contractPrice`\), i.e. the price of 1 contract denominated in base currency. |
 | takerAssetAmount | uint256 | The $$quantity$$ of contracts the maker seeks to obtain. |
 | makerFee | uint256 | The amount of $$margin$$ denoted in base currency the maker would like to post/risk for the order. |
 | takerFee | uint256 | Empty. |
