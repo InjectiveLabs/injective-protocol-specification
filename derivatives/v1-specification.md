@@ -187,8 +187,8 @@ A make order message consists of the following parameters:
 | feeRecipientAddress | address | Address of the recipient of the order transaction fee. |
 | senderAddress | address | Empty. |
 | makerAssetAmount | uint256 | The contract price \(`contractPrice`\), i.e. the price of 1 contract denominated in base currency. |
-| takerAssetAmount | uint256 | The $$quantity$$ of contracts the maker seeks to obtain. |
-| makerFee | uint256 | The amount of $$margin$$ denoted in base currency the maker would like to post/risk for the order. |
+| takerAssetAmount | uint256 | The `quantity` of contracts the maker seeks to obtain. |
+| makerFee | uint256 | The amount of `margin` denoted in base currency the maker would like to post/risk for the order. |
 | takerFee | uint256 | Empty. |
 | expirationTimeSeconds | uint256 | Timestamp in seconds at which order expires. |
 | salt | uint256 | Arbitrary number to facilitate uniqueness of the order's hash. |
@@ -197,11 +197,13 @@ A make order message consists of the following parameters:
 | makerFeeAssetData | bytes | Empty. |
 | takerFeeAssetData | bytes | Empty. |
 
-In a given perpetual market specified by `marketID`, an order encodes the willingness to purchase `quantity` contracts in a given direction \(long or short\) at a specified contract price $$P_{contract}$$ using a specified amount of `margin` of base currency as collateral.
+In a given perpetual market specified by `marketID`, an order encodes the willingness to purchase `quantity` contracts in a given direction \(long or short\) at a specified contract price `contractPrice`  using a specified amount of `margin` of base currency as collateral.
 
 ## Order Validation
 
 ### getOrderRelevantState
+
+`getOrderRelevantState` can be used to validate an order before use with a given index price. 
 
 ```solidity
 /// @dev Fetches all order-relevant information needed to validate if the supplied order is fillable.
@@ -244,7 +246,7 @@ Calling `getOrderRelevantState` will perform the following steps:
 
 ### getOrderRelevantStates
 
-Sequentially calls `getOrderRelevantState`.
+`getOrderRelevantStates` can be used to validate multiple orders before use. 
 
 ```solidity
 /// @dev Fetches all order-relevant information needed to validate if the supplied orders are fillable.
@@ -253,7 +255,7 @@ Sequentially calls `getOrderRelevantState`.
 /// @return The ordersInfo (array of the hash, status, and `takerAssetAmount` already filled for each order),
 /// fillableTakerAssetAmounts (array of amounts for each order's `takerAssetAmount` that is fillable given all on-chain state),
 /// and isValidSignature (array containing the validity of each provided signature).
-/// NOTE: Expects each of the orders to be of the same marketID, otherwise may return incorrect information
+/// NOTE: Expects each of the orders to be of the same marketID, otherwise may potentially return relevant states for orders of differing marketID's using a stale price
 function getOrderRelevantStates(LibOrder.Order[] memory orders, bytes[] memory signatures)
   public
   view
@@ -264,9 +266,13 @@ function getOrderRelevantStates(LibOrder.Order[] memory orders, bytes[] memory s
     );
 ```
 
+**Logic**
+
+Calling `getOrderRelevantStates` will result in sequentially calling `getOrderRelevantState` with the current index price obtained from the oracle.
+
 ### getMakerOrderRelevantStates
 
-TODO: document
+`getMakerOrderRelevantStates` can be used to validate multiple orders from a single maker before use. 
 
 ```solidity
 /// @dev Fetches all order-relevant information needed to validate if the supplied orders are fillable.
@@ -277,7 +283,7 @@ TODO: document
 /// fillableTakerAssetAmounts (array of amounts for each order's `takerAssetAmount` that is fillable given all on-chain state),
 /// isValidSignature (array containing the validity of each provided signature), and availableMargin (amount of available
 /// base currency usable as margin after margin needs of the `orders` are satisfied).
-/// NOTE: Expects each of the orders to be of the same marketID, otherwise may return incorrect information
+/// NOTE: Expects each of the orders to be of the same marketID, otherwise may potentially return relevant states for orders of differing marketID's using a stale price
 function getMakerOrderRelevantStates(
     LibOrder.Order[] memory orders,
     bytes[] memory signatures,
@@ -373,7 +379,7 @@ function fillOrKillOrder(
   uint256 quantity,
   uint256 margin,
   bytes memory signature
-) external returns (FillResults memory);
+) external returns (FillResults memory fillResults);
 ```
 
 **Logic**
@@ -431,9 +437,12 @@ function batchFillOrKillOrders(
 
 Calling `batchFillOrKillOrders` will perform the following steps:
 
+1. Sequentially call `fillOrder` for each element of `orders`, passing in the order, fill amount, and signature at the same index. 
+2. Revert if any of the `fillOrder` calls do not fill the entire quantity passed. 
+
 ## batchFillOrdersSinglePosition
 
-`batchFillOrdersSinglePosition` can be used to
+`batchFillOrdersSinglePosition` can be used to fill multiple orders in a single transaction while creating just one opposing position for the taker. 
 
 ```solidity
 /// @dev Executes multiple calls of fillOrder but creates only one position for the taker.
@@ -443,7 +452,7 @@ Calling `batchFillOrKillOrders` will perform the following steps:
 /// @param signatures The signature of the order signed by maker.
 /// return results The fillResults
 function batchFillOrdersSinglePosition(
-    LibOrder.Order[] memory orders,
+  LibOrder.Order[] memory orders,
   uint256[] memory quantities,
   uint256[] memory margins,
   bytes[] memory signatures
@@ -452,7 +461,7 @@ function batchFillOrdersSinglePosition(
 
 **Logic**
 
-Calling `batchFillOrdersSinglePosition` will perform the following steps:
+Calling `batchFillOrdersSinglePosition` will perform the same steps as `batchFillOrders` but will reuse the same taker position to create the opposing position for each order. 
 
 ## batchFillOrKillOrdersSinglePosition
 
@@ -475,11 +484,11 @@ function batchFillOrKillOrdersSinglePosition(
 
 **Logic**
 
-Calling `batchFillOrKillOrdersSinglePosition` will perform the following steps:
+Calling `batchFillOrKillOrdersSinglePosition` will perform the same steps as `batchFillOrdersSinglePosition` but will revert if each of the quantities specified is not filled. 
 
 ## **marketOrders**
 
-`marketOrders` can be used to
+`marketOrders` can be used to can be used to purchase a specified quantity of contracts of a derivative by filling multiple orders while guaranteeing that no individual fill throws an error. Note that this function does not enforce that the entire quantity is filled. The input orders should be sorted from best to worst price.
 
 ```solidity
 /// @dev marketOrders executes the orders sequentially using `fillOrder` until the desired `quantity` is reached or until all of the margin provided is used.
@@ -499,9 +508,11 @@ function marketOrders(
 
 Calling `marketOrders` will perform the following steps:
 
+1. Sequentially call `fillOrder` while decrementing the `quantity` and `margin` executed after each fill until the quantity is fully filled, the margin is exhausted, or all of the orders have been executed. 
+
 ## **marketOrdersOrKill**
 
-`marketOrdersOrKill` can be used to
+`marketOrders` can be used to can be used to purchase a specified quantity of contracts of a derivative by filling multiple orders while guaranteeing that no individual fill throws an error. Note that this function enforces that the entire quantity is filled. The input orders should be sorted from best to worst price.
 
 ```solidity
 /// @dev marketOrdersOrKill performs the same steps as `marketOrders` but reverts if the inputted `quantity` of contracts are not filled
@@ -519,7 +530,7 @@ function marketOrdersOrKill(
 
 **Logic**
 
-Calling `marketOrdersOrKill` will perform the following steps:
+Calling `marketOrdersOrKill` will perform the same steps as `marketOrders` but will revert if the entire `quantity` is not filled. 
 
 # Matching Orders
 
@@ -527,7 +538,7 @@ Two orders of opposing directions can directly be matched if they have a negativ
 
 ## matchOrders
 
-This is the most basic way to match two orders.
+`matchOrders` can be used to atomically fill 2 orders without requiring the taker to hold any capital. This function is optimized for creator of the `rightOrder`.
 
 ```solidity
 /// @dev Matches the input orders.
@@ -545,11 +556,11 @@ function matchOrders(
 
 **Logic**
 
-Calling `matchOrders` will perform the following steps:
+Calling `matchOrders` will perform the following steps: TODO
 
 ## multiMatchOrders
 
-`multiMatchOrders` can be used to
+`multiMatchOrders` can be used to match a set of orders with another opposing order with negative spread, resulting in the creation of just one position for the creator of the `rightOrder`. This function is optimized for creator of the `rightOrder`.
 
 ```solidity
 /// @dev Matches the input orders and only creates one position for the `rightOrder` maker.
@@ -567,11 +578,11 @@ function multiMatchOrders(
 
 **Logic**
 
-Calling `multiMatchOrders` will perform the following steps:
+Calling `multiMatchOrders` will sequentially call `matchOrders`.
 
 ## batchMatchOrders
 
-`batchMatchOrders` can be used to
+`batchMatchOrders` can be used to match 2 sets of an arbitrary number of orders with each other using the same matching strategy as [`matchOrders`](https://github.com/0xProject/0x-protocol-specification/blob/master/v3/v3-specification.md#matchorders).
 
 ```solidity
 /// @dev Matches the input orders.
@@ -589,7 +600,7 @@ function batchMatchOrders(
 
 **Logic**
 
-Calling `batchMatchOrders` will perform the following steps:
+Calling `batchMatchOrders` will sequentially call `matchOrders`. 
 
 # Transaction Fees
 
@@ -718,7 +729,7 @@ function liquidatePositionWithOrders(
 ) external returns (PositionResults[] memory pResults, LiquidateResults memory lResults){
 ```
 
-Logic
+**Logic**
 
 Calling `liquidatePositionWithOrders` will perform the following steps:
 
