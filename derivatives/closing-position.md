@@ -25,11 +25,12 @@ Calling `closePosition` will perform the following steps:
 1. Query the oracle to obtain the most recent price and funding fee.
 2. Execute funding payments on the existing position and then update the existing position state.
 3. Check that the existing `position` (referenced by `positionID`) is valid and can be closed. 
-4. Create the Makers' Positions. For each order `i`:
-   1. If the order has been used previously, execute funding payments on the existing position and then update the existing position state. Otherwise, create a new account with a corresponding new position with the `pResults[i].quantity` contracts for the maker and log a `FuturesPosition` event.
-   2. Transfer `pResults[i].marginUsed + pResults[i].fee` of base currency from the maker to the contract to create (or add to) the maker's position.
-   3. Allocate `pResults.marginUsed` for the new position margin and allocate `relayerFeePercentage` of the `pResults.fee` to the fee recipient (if specified) and the remaining `pResults.fee` to the insurance pool.
-5. Close the existing position. 
+4. Create the Makers' Positions.
+   1.  For each order `i`:
+      1. If the order has been used previously, execute funding payments on the existing position and then update the existing position state. Otherwise, create a new account with a corresponding new position with the `pResults[i].quantity` contracts for the maker and log a `FuturesPosition` event.
+      2. Transfer `pResults[i].marginUsed + pResults[i].fee` of base currency from the maker to the contract to create (or add to) the maker's position.
+      3. Allocate `pResults.marginUsed` for the new position margin and allocate `relayerFeePercentage` of the `pResults.fee` to the fee recipient (if specified) and the remaining `pResults.fee` to the insurance pool.
+5. Close the `cResults.quantity` quantity conracts of the existing position. 
    1. Calculate the PNL per contract (`contractPNL`) which equals `averageClosingPrice - position.contractPrice` for longs and ` position.contractPrice - averageClosingPrice ` for shorts, where:
       * `averageClosingPrice = (orders[i].contractPrice * results[0].quantity + orders[n-1].contractPrice * results[n-1].quantity)/(cResults.quantity)` 
       * `cResults.quantity = results[0].quantity + ... + results[n-1].quantity` . Note that `cResults.quantity <= quantity`. 

@@ -1,81 +1,45 @@
 # Liquidation
 
-* **Liquidating a Position - TODO**
-
-  Currently, this model only supports isolated margined accounts \(i.e. 1 account holds 1 position\) and hence, an account being subject to liquidation means that its corresponding position is subject to liquidation. Once cross-margining across multiple positions is supported, we will change our nomenclature so that accounts will be considered to be subject to liquidation, not positions.
-
-  For simplicity, we consider positions for liquidations.
-
-  A perpetual `Position` held by a given `accountID` of a given `marketID` records a `direction`, `quantity`, `contractPrice`, `margin`, and `cumulativeFundingEntry`.
-
-  Each `Market` records a given `initialMarginRatio`, `liquidationPenalty`, `indexPrice`, `currFundingTimestamp`, `fundingInterval`, `cumulativeFunding`, `makerTxFee`, `takerTxFee`, and a `relayerFeePercentage`.
 
 
-    When an account's $NAV$ goes under 0, the account is subject to liquidation.
-    
-    $NAV = \sum\limits\_{positions} \(margin + quantity\cdot \(NPV - minMargin\)\)$
-    
-    For simplicity we consider the case when the account only holds 1 position. If the following liquidation condition is true, the account can be liquidated:
-    
-    $$\frac{margin}{quantity} \leq P_{index}\cdot penalty - NPV$$
-    
-    Hence for a perpetual long, this simplifies to:
-    
-    $\frac{margin}{quantity} \leq P_{index}\cdot penalty - P_{index}+P_{contract} + F_{entry}$
-    
-    $\frac{margin}{quantity} \leq \(-1+penalty\)\cdot P_{index}+P_{contract} + F\_{entry}$
-    
-    For a perpetual short, this is:
-    
-    $\frac{margin}{quantity} \leq P_{index}\cdot penalty - P_{contract}+P_{index}-F_{entry}$
-    
-    $\frac{margin}{quantity} \leq \(1+ penalty\)\cdot P_{index} - P_{contract}-F\_{entry}$
+## liquidatePositionWithOrders 
 
-  * **Position Liquidation Price**
-
-    Each position has a liquidation price and a bankruptcy price. When the index price reaches a position's liquidation price, the position can be liquidated. When the index price reaches a position's bankruptcy price, the position can be vaporized.
-
-    A position's liquidation price is computed as follows:
-
-    **Isolated Margin Long Position Liquidation Price**
-
-    $margin + quantity \cdot \(P_{index} - P_{contract}-F_{entry} - P_{index}\cdot penalty\) \leq 0$
-
-    $P_{index} \leq \frac{P_{contract}+F\_{entry}-\frac{margin}{quantity}}{1 - penalty}$
-
-    **Isolated Margin Short Position Liquidation Price**
-
-    $margin + quantity \cdot \(-P_{index}+P_{contract}+F_{entry} - P_{index}\cdot penalty\) \leq 0$
-
-    $P_{index} \geq \frac{P_{contract}+F\_{entry}+\frac{margin}{quantity}}{1 + penalty}$
-
-    **Cross Margin Long Position Liquidation Price**
-
-    For a given position $i$, let $\mathrm{position value}\_i = margin + quantity\cdot \(NPV - minMargin\)$ for a given position.
-
-    Hence, cross-margined positions are subject to liquidation when $\sum\limits\_{positions} \mathrm{position value}\_i \leq 0$ or equivalently when:
-
-    $$P_{index_i}\leq \frac{ P_{contract_i} + F_{entry_i} - \frac{margin_i + \sum\limits_{j=positions \backslash \{i\}} \mathrm{position\ value}_j}{quantity_i} }{1-penalty_i}$$
-
-    **Position Bankruptcy Price**
-
-    Suppose you are liquidating a `position`
-
-    Liquidating a position is similar to closing a position, except that
-
-    Must pass in one or more `orders` to
-
-    ```jsx
+```jsx
 /// @dev Closes the input position.
-    /// @param positionID The ID of the position to liquidate.
-    /// @param quantity The quantity of contracts of the position to liquidate.
-    /// @param orders The orders to use to liquidate the position.
-    /// @param signatures The signatures of the orders signed by makers.
-    function liquidatePositionWithOrders(
-      uint256 positionID,
-      uint256 quantity,
-      LibOrder.Order[] memory orders,
-      bytes[] memory signatures
-    ) external {
-    ```
+/// @param positionID The ID of the position to liquidate.
+/// @param quantity The quantity of contracts of the position to liquidate.
+/// @param orders The orders to use to liquidate the position.
+/// @param signatures The signatures of the orders signed by makers.
+function liquidatePositionWithOrders(
+  uint256 positionID,
+  uint256 quantity,
+  LibOrder.Order[] memory orders,
+  bytes[] memory signatures
+) external returns (PositionResults[] memory pResults, LiquidateResults memory lResults){
+```
+
+Logic
+
+Calling `liquidatePositionWithOrders` will perform the following steps:
+
+1. Query the oracle to obtain the most recent price and funding fee.
+2. Execute funding payments on the existing position and then update the existing position state.
+3. Check that the existing `position` (referenced by `positionID`) is valid and can be liquidated (i.e. that the [maintenance margin requirement](keyterms.md#maintenance-margin-requirement) is breached. 
+4. Create the Makers' Positions. 
+   1. For each order `i`:
+      1. If the order has been used previously, execute funding payments on the existing position and then update the existing position state. Otherwise, create a new account with a corresponding new position with the `pResults[i].quantity` contracts for the maker and log a `FuturesPosition` event.
+      2. Transfer `pResults[i].marginUsed + pResults[i].fee` of base currency from the maker to the contract to create (or add to) the maker's position.
+      3. Allocate `pResults.marginUsed` for the new position margin and allocate `relayerFeePercentage` of the `pResults.fee` to the fee recipient (if specified) and the remaining `pResults.fee` to the insurance pool.
+   2. `lResults.quantity` equals the total quantity of contracts created across the orders from the previous step, i.e. `lResults.quantity = pResults[0].quantity + ... + pResults[n-1].quantity` . Note that `lResults.quantity <= quantity`. 
+   3.  `lResults.liquidationPrice` equals the weighted average price, i.e. `lResults.liquidationPrice = (orders[i].contractPrice * pResults[0].quantity + orders[n-1].contractPrice * pResults[n-1].quantity)/(lResults.quantity)` 
+      * To liquidate a long position, `lResults.liquidationPrice` must be greater than or equal to the index price. 
+      * To liquidate a short position, `lResults.liquidationPrice` must be less than or equal to the index price. 
+
+5. Close the `lResults.quantity` quantity contracts of the existing position. 
+   1. Calculate the PNL per contract (`contractPNL`) which equals `lResults.liquidationPrice - position.contractPrice` for longs and ` position.contractPrice - averageClosingPrice ` for shorts.
+   2. 
+   3. Transfer half of the `lResults.loss` to the free deposits of the liquidator of the `position` and the other half to the insurance pool. 
+      * `lResults.loss = position.margin - lResults.quantity * (position.margin / position.quantity + contractPNL) ` 
+
+
 

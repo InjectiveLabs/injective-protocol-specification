@@ -140,10 +140,6 @@ $$
 \frac{margin}{quantity} \geq P_{index} \cdot penalty- NPV
 $$
 
-{% hint style="info" %}
-NOTE: At a given point in time, the $$margin$$ value reflects the net margin values of each position after all funding fees have been paid.
-{% endhint %}
-
 ## **Clawback**
 
 A clawback event occurs when a threshold number of accounts cannot be liquidated with a net-zero final payout. In practice, this happens when a chain reaction of unidirectional liquidation cannot be liquidated with the position margin due to volatility or lack of liquidity.
