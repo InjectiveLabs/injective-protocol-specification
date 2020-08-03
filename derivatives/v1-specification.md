@@ -34,7 +34,7 @@
 	1. [Matching Orders](#matching-orders)
 1. [Positions](#positions)
 	1. [Closing a Position](#closePosition)
-	1. [Liquidating a Position](#liquidation)
+	1. [Liquidating a Position](#liquidatepositionwithorders)
 1. [Transaction Fees](#transaction-fees)
 1. [Oracle](#oracle)
 # Overview
