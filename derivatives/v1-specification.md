@@ -4,6 +4,29 @@
 
 1. [Overview](#overview)
 1. [Key Terms](#key-terms)
+  1. [Perpetual Swap](#perpetual-swap)
+  1. [CFD](#cfd)
+  1. [Address](#address)
+  1. [Account](#account)
+  1. [Deposits](#deposits)
+  1. [Market](#market)
+  1. [Direction](#direction)
+  1. [Index Price](#index-price)
+  1. [Contract Price](#contract-price)
+  1. [Quantity](#quantity)
+  1. [Position](#position)
+  1. [Margin](#margin)
+  1. [Contract](#contract)
+  1. [Order](#order)
+  1. [Funding](#funding)
+  1. [Funding Rate](#funding-rate)
+  1. [Funding Fee](#funding-fee)
+  1. [Liquidation](#liquidation)
+  1. [Liquidation Penalty](#liquidation-penalty)
+  1. [Initial Margin Requirement](#initial-margin-requirement)
+  1. [Maintenance Margin Requirement](#maintenance-margin-requirement)
+  1. [Clawback](#clawback)
+  1. [Leverage](#lLeverage)
 1. [Orders](#make-orders)
 	1. [Order Message Format](#order-message-format)
 	1. [Order Validation](#order-validation)
@@ -56,10 +79,10 @@ Long or Short.
 ## **Index Price**
 
 The reference spot index price of the underlying asset that the derivative contract derives from. This value is obtained from an oracle.
-
-$$
+<img src="https://render.githubusercontent.com/render/math?math=P_%7Bindex%7D%3D%5Cmathrm%7Bindex%5C%20price%5C%20of%5C%20underlying%7D">
+<!-- $$
 P_{index}=\mathrm{index\ price\ of\ underlying}
-$$
+$$ -->
 
 ## **Contract Price**
 
@@ -219,7 +242,7 @@ In a given perpetual market specified by `marketID`, an order encodes the willin
 
 ### getOrderRelevantState
 
-```javascript
+```solidity
 /// @dev Fetches all order-relevant information needed to validate if the supplied order is fillable.
 /// @param order The order structure
 /// @param signature Signature provided by maker that proves the order's authenticity.
@@ -262,7 +285,7 @@ Calling `getOrderRelevantState` will perform the following steps:
 
 Sequentially calls `getOrderRelevantState`.
 
-```javascript
+```solidity
 /// @dev Fetches all order-relevant information needed to validate if the supplied orders are fillable.
 /// @param orders Array of order structures
 /// @param signatures Array of signatures provided by makers that prove the authenticity of the orders.
@@ -284,7 +307,7 @@ function getOrderRelevantStates(LibOrder.Order[] memory orders, bytes[] memory s
 
 TODO: document
 
-```javascript
+```solidity
 /// @dev Fetches all order-relevant information needed to validate if the supplied orders are fillable.
 /// @param orders Array of order structures
 /// @param signatures Array of signatures provided by makers that prove the authenticity of the orders.
@@ -311,7 +334,7 @@ function getMakerOrderRelevantStates(
 
 ### OrderInfo
 
-```javascript
+```solidity
 struct OrderInfo {
     uint8 orderStatus;                    // Status that describes order's validity and fillability.
     bytes32 orderHash;                    // EIP712 hash of the order (see LibOrder.getOrderHash).
@@ -321,7 +344,7 @@ struct OrderInfo {
 
 ### Order Status
 
-```javascript
+```solidity
 enum OrderStatus {
     INVALID,
     INVALID_MAKER_ASSET_AMOUNT,
@@ -342,7 +365,7 @@ Orders can be filled by calling the following methods on the `InjectiveFutures` 
 
 This is the most basic way to fill an order. All of the other methods call `fillOrder` under the hood with additional logic. This function will attempt to execute `quantity` contracts of the `order` specified by the caller. However, if the remaining fillable amount is less than the `quantity` specified, the remaining amount will be filled. Partial fills are allowed when filling orders.
 
-```javascript
+```solidity
 /// @dev Fills the input order.
 /// @param order The make order to be executed.
 /// @param quantity Desired quantity of contracts to execute.
@@ -377,7 +400,7 @@ Calling `fillOrder` will perform the following steps:
 
 `fillOrKillOrder` can be used to fill an order while guaranteeing that the specified amount will either be filled or the call will revert.
 
-```javascript
+```solidity
 /// @dev Fills the input order. Reverts if exact quantity not filled
 /// @param order The make order to be executed.
 /// @param quantity Desired quantity of contracts to execute.
@@ -428,7 +451,7 @@ Calling `batchFillOrders` will perform the following steps:
 
 `batchFillOrKillOrders`can be used to fill multiple orders in a single transaction while guaranteeing that the specified amounts will either be filled or the call will revert.
 
-```javascript
+```solidity
 /// @dev Executes multiple calls of fillOrKill orders.
 /// @param orders The make order to be executed.
 /// @param quantities Desired quantity of contracts to execute.
@@ -451,7 +474,7 @@ Calling `batchFillOrKillOrders` will perform the following steps:
 
 `batchFillOrdersSinglePosition` can be used to
 
-```javascript
+```solidity
 /// @dev Executes multiple calls of fillOrder but creates only one position for the taker.
 /// @param orders The make order to be executed.
 /// @param quantities Desired quantity of contracts to execute.
@@ -474,7 +497,7 @@ Calling `batchFillOrdersSinglePosition` will perform the following steps:
 
 `batchFillOrKillOrdersSinglePosition` can be used to
 
-```javascript
+```solidity
 /// @dev Executes batchFillOrKillOrders but creates only one position for the taker.
 /// @param orders The make order to be executed.
 /// @param quantities Desired quantity of contracts to execute.
@@ -497,7 +520,7 @@ Calling `batchFillOrKillOrdersSinglePosition` will perform the following steps:
 
 `marketOrders` can be used to
 
-```javascript
+```solidity
 /// @dev marketOrders executes the orders sequentially using `fillOrder` until the desired `quantity` is reached or until all of the margin provided is used.
 /// @param orders Array of order specifications.
 /// @param quantity Desired quantity of contracts to execute.
@@ -519,7 +542,7 @@ Calling `marketOrders` will perform the following steps:
 
 `marketOrdersOrKill` can be used to
 
-```javascript
+```solidity
 /// @dev marketOrdersOrKill performs the same steps as `marketOrders` but reverts if the inputted `quantity` of contracts are not filled
 /// @param orders Array of order specifications.
 /// @param quantity Desired quantity of contracts to execute.
@@ -545,7 +568,7 @@ Two orders of opposing directions can directly be matched if they have a negativ
 
 This is the most basic way to match two orders.
 
-```javascript
+```solidity
 /// @dev Matches the input orders.
 /// @param leftOrder The order to be settled.
 /// @param rightOrder The order to be settled.
@@ -567,7 +590,7 @@ Calling `matchOrders` will perform the following steps:
 
 `multiMatchOrders` can be used to
 
-```javascript
+```solidity
 /// @dev Matches the input orders and only creates one position for the `rightOrder` maker.
 /// @param leftOrders The orders to be settled.
 /// @param rightOrder The order to be settled.
@@ -589,7 +612,7 @@ Calling `multiMatchOrders` will perform the following steps:
 
 `batchMatchOrders` can be used to
 
-```javascript
+```solidity
 /// @dev Matches the input orders.
 /// @param leftOrders The orders to be settled.
 /// @param rightOrder The order to be settled.
@@ -663,7 +686,7 @@ For a given `order` with a transaction fee of `txFee`, if the `feeRecipientAddre
 
 ## closePosition
 
-```javascript
+```solidity
 /// @dev Closes the input position.
 /// @param positionID The positionID of the position being closed
 /// @param orders The orders to use to settle the position
@@ -698,7 +721,7 @@ Calling `closePosition` will perform the following steps:
    3. Log a `FuturesClose` event. 
 
 ## closePositionOrKill
-```javascript
+```solidity
 /// @dev Closes the input position and revert if the entire `quantity` of contracts cannot be closed.
 /// @param positionID The positionID of the position being closed
 /// @param orders The orders to use to settle the position
