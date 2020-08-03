@@ -69,6 +69,17 @@ Calling `fillOrKillOrder` will perform the following steps:
 
 ```text
 /// @dev Executes multiple calls of fillOrder.
+/// @param orders The make order to be executed.
+/// @param quantities Desired quantity of contracts to execute.
+/// @param margins Desired amount of margin (denoted in baseCurrency) to use to fill the order.
+/// @param signatures The signature of the order signed by maker.
+/// return results The fillResults
+function batchFillOrders(
+  LibOrder.Order[] memory orders,
+  uint256[] memory quantities,
+  uint256[] memory margins,
+  bytes[] memory signatures
+) external returns (FillResults[] memory results); 
 ```
 
 **Logic**
@@ -151,18 +162,17 @@ Calling `batchFillOrKillOrdersSinglePosition` will perform the following steps:
 `marketOrders` can be used to
 
 ```javascript
-/// @dev marketOrders executes the orders
+/// @dev marketOrders executes the orders sequentially using `fillOrder` until the desired `quantity` is reached or until all of the margin provided is used.
 /// @param orders Array of order specifications.
 /// @param quantity Desired quantity of contracts to execute.
 /// @param margin Desired amount of margin (denoted in baseCurrency) to use to fill the orders.
 /// @param signatures Proofs that orders have been signed by makers.
-/// @return accountID The accountID of the newly created account, if there is one.
 function marketOrders(
-    LibOrder.Order[] memory orders,
-    uint256 quantity,
-    uint256 margin,
-    bytes[] memory signatures
-) public returns (bytes32);
+	LibOrder.Order[] memory orders,
+	uint256 quantity,
+	uint256 margin,
+	bytes[] memory signatures
+) public returns (FillResults[] memory results)
 ```
 
 **Logic**
@@ -174,7 +184,7 @@ Calling `marketOrders` will perform the following steps:
 `marketOrdersOrKill` can be used to
 
 ```javascript
-/// @dev marketOrdersOrKill executes the orders and reverts if the `quantity` of contracts are not filled
+/// @dev marketOrdersOrKill performs the same steps as `marketOrders` but reverts if the inputted `quantity` of contracts are not filled
 /// @param orders Array of order specifications.
 /// @param quantity Desired quantity of contracts to execute.
 /// @param margin Desired amount of margin (denoted in baseCurrency) to use to fill the orders.
