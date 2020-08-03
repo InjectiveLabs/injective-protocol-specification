@@ -15,19 +15,19 @@
 
 ## Derivatives
 
-* [Overview](derivatives/overview/README.md)
-  * [Key Terms](derivatives/overview/keyterms/README.md)
-    * [Leverage](derivatives/overview/keyterms/leverage.md)
-  * [Getting Started](derivatives/overview/getting-started.md)
-  * [Make Orders](derivatives/overview/creating-an-order.md)
-  * [Take Orders](derivatives/overview/take-orders.md)
-  * [Matching Orders](derivatives/overview/matching.md)
-  * [Transaction Fees](derivatives/overview/fees.md)
-  * [Closing Position](derivatives/overview/closing-position.md)
-  * [Liquidation](derivatives/overview/liquidation.md)
-  * [Oracle](derivatives/overview/oracle.md)
-  * [Examples](derivatives/overview/example.md)
-  * [Implementation](derivatives/overview/implementation.md)
+* [Overview](derivatives/README.md)
+  * [Key Terms](derivatives/keyterms/README.md)
+    * [Leverage](derivatives/keyterms/leverage.md)
+  * [Getting Started](derivatives/getting-started.md)
+  * [Make Orders](derivatives/creating-an-order.md)
+  * [Take Orders](derivatives/take-orders.md)
+  * [Matching Orders](derivatives/matching.md)
+  * [Transaction Fees](derivatives/fees.md)
+  * [Closing Position](derivatives/closing-position.md)
+  * [Liquidation](derivatives/liquidation.md)
+  * [Oracle](derivatives/oracle.md)
+  * [Examples](derivatives/example.md)
+  * [Implementation](derivatives/implementation.md)
 
 ## Developers
 
