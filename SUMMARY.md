@@ -15,7 +15,8 @@
 
 ## Derivatives
 
-* [Overview](derivatives/README.md)
+* [Derivatives Protocol Specification](/derivatives/v1-specification.md)
+<!-- * [Overview](derivatives/README.md)
   * [Key Terms](derivatives/keyterms.md)
     * [Leverage](derivatives/leverage.md)
   * [Getting Started](derivatives/getting-started.md)
@@ -27,7 +28,7 @@
   * [Liquidation](derivatives/liquidation.md)
   * [Oracle](derivatives/oracle.md)
   * [Examples](derivatives/example.md)
-  * [Implementation](derivatives/implementation.md)
+  * [Implementation](derivatives/implementation.md) -->
 
 ## Developers
 
