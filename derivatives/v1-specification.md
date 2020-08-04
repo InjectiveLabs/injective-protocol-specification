@@ -22,7 +22,6 @@
 	1. [Funding Rate](#funding-rate)
 	1. [Funding Fee](#funding-fee)
 	1. [Liquidation](#liquidation)
-	1. [Liquidation Penalty](#liquidation-penalty)
 	1. [Initial Margin Requirement](#initial-margin-requirement)
 	1. [Maintenance Margin Requirement](#maintenance-margin-requirement)
 	1. [Clawback](#clawback)
@@ -128,23 +127,20 @@ Net Present Value of a single contract. For long and short perpetual contracts, 
 - `NPV_long = indexPrice - contractPrice - F_entry`
 - `NPV_short = - NPV_long = contractPrice - indexPrice + F_entry`
 
+## **NAV**
+
+The Net Asset Value for an account. Equals the sum of the net position value over all of the account's positions. 
+
+`NAV = sum(quantity * NPV + margin - indexPrice * maintenanceMarginRatio)`
+
 ## **Liquidation**
 
 When an account's **NAV** becomes negative, all of its positions are subject to liquidation, i.e. the forced closure of the position due to a maintenance margin requirement being breached.
 
-## **Liquidation Penalty**
+<!-- ## **Liquidation Penalty**
 
 The liquidation penalty (`liquidationPenalty`) is a fixed percentage defining the value of the liquidated position that is paid out. Each market can define its own liquidation penalty \(e.g. 3%\) but every market's liquidation penalty must be greater than the global minimum liquidation penalty.
-
-## **Initial Margin Requirement**
-
-When a position is first created, the amount of collateral supplied as margin must satisfy the initial margin requirement. This margin requirement is stricter than the maintenance margin requirement and exists in order to reduce the risk of immediate liquidation.
-
-`initialMarginRatio=penalty+initialMarginRatioFactor`
-
-Upon position creation, each contract must satisfy the following margin requirement:
-
-`margin / quantity >= max(contractPrice * initialMarginRatio, indexPrice * initialMarginRatio - NPV`
+ -->
 
 ## **Maintenance Margin Requirement**
 
@@ -152,7 +148,17 @@ The maintenance margin requirement refers to the minimum amount of margin that a
 
 Throughout the lifetime of a position, each contract must satisfy the following margin requirement:
 
-`margin / quantity >= indexPrice * liquidationPenalty - NPV`
+`margin / quantity >= indexPrice * maintenanceMarginRatio - NPV`
+
+## **Initial Margin Requirement**
+
+When a position is first created, the amount of collateral supplied as margin must satisfy the initial margin requirement. This margin requirement is stricter than the maintenance margin requirement and exists in order to reduce the risk of immediate liquidation.
+
+`initialMarginRatio = maintenanceMarginRatio + initialMarginRatioFactor`
+
+Upon position creation, each contract must satisfy the following margin requirement:
+
+`margin / quantity >= max(contractPrice * initialMarginRatio, indexPrice * initialMarginRatio - NPV`
 
 ## Liquidation Price
 
@@ -160,11 +166,11 @@ The liquidation price is the price at which a position can be liquidated and can
 
 For longs:
 
-`contractPrice = indexPrice - indexPrice * liquidationPenalty + margin / quantity - F_entry`
+`contractPrice = indexPrice - indexPrice * maintenanceMarginRatio + margin / quantity - F_entry`
 
 For shorts:
 
-`contractPrice =  indexPrice + indexPrice * liquidationPenalty - margin / quantity  - F_entry`
+`contractPrice =  indexPrice + indexPrice * maintenanceMarginRatio - margin / quantity  - F_entry`
 
 ## **Clawback**
 
