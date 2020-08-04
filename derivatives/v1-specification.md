@@ -130,7 +130,7 @@ Net Present Value of a single contract. For long and short perpetual contracts, 
 
 ## **Liquidation**
 
-When an account's **NAV** becomes negative, all of its positions are subject to liquidation, i.e. the forced closure of the position due to a minimum collateral requirement being breached.
+When an account's **NAV** becomes negative, all of its positions are subject to liquidation, i.e. the forced closure of the position due to a maintenance margin requirement being breached.
 
 ## **Liquidation Penalty**
 
@@ -153,6 +153,18 @@ The maintenance margin requirement refers to the minimum amount of margin that a
 Throughout the lifetime of a position, each contract must satisfy the following margin requirement:
 
 `margin / quantity >= indexPrice * liquidationPenalty - NPV`
+
+## Liquidation Price
+
+The liquidation price is the price at which a position can be liquidated and can be derived from the maintenance margin requirement formula. 
+
+For longs:
+
+`contractPrice = indexPrice - indexPrice * liquidationPenalty + margin / quantity - F_entry`
+
+For shorts:
+
+`contractPrice =  indexPrice + indexPrice * liquidationPenalty - margin / quantity  - F_entry`
 
 ## **Clawback**
 
