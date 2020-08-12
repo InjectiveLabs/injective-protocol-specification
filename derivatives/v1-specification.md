@@ -211,7 +211,7 @@ A make order message consists of the following parameters:
 | expirationTimeSeconds | uint256 | Timestamp in seconds at which order expires. |
 | salt | uint256 | Arbitrary number to facilitate uniqueness of the order's hash. |
 | makerAssetData | bytes | The first 32 bytes contain the `marketID` of the market for the position if the order is LONG, empty otherwise.  Right padded with 0's to be 36 bytes |
-| takerAssetData | bytes | The first 32 bytes contain the `marketID` of the market for the position if the order is LONG, empty otherwise.  Right padded with 0's to be 36 bytes |
+| takerAssetData | bytes | The first 32 bytes contain the `marketID` of the market for the position if the order is SHORT, empty otherwise.  Right padded with 0's to be 36 bytes |
 | makerFeeAssetData | bytes | Empty. |
 | takerFeeAssetData | bytes | Empty. |
 
